@@ -10,6 +10,10 @@ public class Star : MonoBehaviour
 
     [HideInInspector]
     [SerializeField]
+    private AudioSource _audioSource;
+
+    [HideInInspector]
+    [SerializeField]
     private Animator _animator;
 
     private void OnValidate()
@@ -17,6 +21,11 @@ public class Star : MonoBehaviour
         if(_animator == null)
         {
             _animator = GetComponent<Animator>();
+        }
+
+        if (_audioSource == null)
+        {
+            _audioSource = GetComponent<AudioSource>();
         }
     }
 
