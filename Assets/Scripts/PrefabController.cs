@@ -31,8 +31,26 @@ public class PrefabController : Controller<PrefabController>
     [SerializeField]
     private GameObject[] _prefabs;
 
+    private List<Planet> _planets;
+
     protected override void OnAwake()
     {
+        _planets = new List<Planet>();
+
+        foreach(var prefab in _prefabs)
+        {
+            var planet = prefab.GetComponent<Planet>();
+            if(planet != null)
+            {
+                _planets.Add(planet);
+            }
+        }
+    }
+
+    public Planet GetRandomPlanet()
+    {
+        var planet = Instantiate(_planets[Random.Range(0, _planets.Count - 1)]);
+        return planet;
     }
 
     public GameObject GetPrefabInstance(int index)

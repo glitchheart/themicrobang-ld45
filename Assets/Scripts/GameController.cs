@@ -62,6 +62,9 @@ public class GameController : Controller<GameController>
     }
 
     [SerializeField]
+    private Universe _universe;
+
+    [SerializeField]
     private Transform _cameraOrbit;
 
     [SerializeField]
@@ -95,6 +98,11 @@ public class GameController : Controller<GameController>
         CameraController.Instance.SwitchToCamera(CameraController.INTRO_CAMERA);
     }
 
+    public void PlacePlanet()
+    {
+        _universe.PlaceNextPlanet();
+    }
+
     private void Update()
     {
         if(!RunCommands())
@@ -110,13 +118,7 @@ public class GameController : Controller<GameController>
                 case GameMode.Playing:
                     if(_playMode == PlayMode.MovingAround)
                     {
-                        if (Input.GetMouseButtonDown(0))
-                        {
-                            var planet = PrefabController.Instance.GetPrefabInstance(PrefabController.PLANET1_PREFAB);
-                            planet.transform.position = CameraController.Instance.CurrentCamera.transform.position + CameraController.Instance.CurrentCamera.transform.forward * 10.0f;
-                            _planetToPlace = planet;
-                        }
-                        else if (Input.GetMouseButton(1))
+                        if (Input.GetMouseButton(1))
                         {
                             float h = _rotateSpeed * Input.GetAxis("Mouse X");
                             float v = _rotateSpeed * Input.GetAxis("Mouse Y");
