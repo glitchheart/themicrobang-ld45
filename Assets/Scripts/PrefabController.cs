@@ -11,13 +11,13 @@ public abstract class Controller<T> : MonoBehaviour where T : MonoBehaviour
         if (Instance == null)
         {
             Instance = this as T;
-            OnAwake();
         }
         else if (Instance != this)
         {
             DestroyImmediate(gameObject);
             return;
         }
+        OnAwake();
     }
 
     protected virtual void OnAwake() { }
