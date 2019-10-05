@@ -348,12 +348,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 291787456}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.4232216, y: 1.0796058, z: -6.427603}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 771898136}
   - {fileID: 998668517}
   - {fileID: 1467038853}
-  - {fileID: 1046111949}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5374,6 +5374,8 @@ PlayableDirector:
     value: {fileID: 0}
   - key: {fileID: -6029934608716708719, guid: cf27f74398a5e4575a2eff3bd8fd9cce, type: 2}
     value: {fileID: 0}
+  - key: {fileID: 2148796441828741262, guid: cf27f74398a5e4575a2eff3bd8fd9cce, type: 2}
+    value: {fileID: 0}
   m_ExposedReferences:
     m_References:
     - 537a1a7c739a148c8ac6575e1eb8db0e: {fileID: 1564086896}
@@ -5422,7 +5424,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e518bf6a84ecb404ca1a7a61f7603a2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _universe: {fileID: 0}
+  _universe: {fileID: 771898137}
   _cameraOrbit: {fileID: 13342594}
   _gameMode: 0
   _introPlayable: {fileID: 633638024}
@@ -5456,6 +5458,51 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!1 &771898135
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 771898136}
+  - component: {fileID: 771898137}
+  m_Layer: 0
+  m_Name: Universe
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &771898136
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 771898135}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1046111949}
+  m_Father: {fileID: 291787457}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &771898137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 771898135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81f9a7ed50c6a47f190d58ac0e537a8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxRings: 10
 --- !u!1 &989256551
 GameObject:
   m_ObjectHideFlags: 3
@@ -5641,7 +5688,7 @@ Transform:
   m_LocalScale: {x: 9.25, y: 9.25, z: 9.25}
   m_Children: []
   m_Father: {fileID: 291787457}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &998668518
 Animator:
@@ -5739,7 +5786,7 @@ Light:
   m_BounceIntensity: 0.87
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: NaN}
+  m_BoundingSphereOverride: {x: 0.21875, y: 0.0625, z: 0.0625, w: -0.0625}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -5810,11 +5857,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1046111944}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.7232216, y: -0.9796058, z: 0.92760277}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children: []
-  m_Father: {fileID: 291787457}
-  m_RootOrder: 2
+  m_Father: {fileID: 771898136}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &1046111950
 Animator:
@@ -6518,7 +6565,7 @@ Transform:
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children: []
   m_Father: {fileID: 291787457}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &1467038854
 SphereCollider:
@@ -6932,9 +6979,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _prefabs:
   - {fileID: 7791634683770169768, guid: c5fad6a1ed9924a14a918857e542e50d, type: 3}
-  - {fileID: -927199367670048503, guid: 1689f4978ca2b5445ab67a64200be66e, type: 3}
+  - {fileID: 8740288024595679350, guid: 5f7db7f43f422bb41bc895344e3cf59d, type: 3}
   - {fileID: 7448423817839546251, guid: 27f5e863752924f37b42b5163e96b051, type: 3}
-  - {fileID: -927199367670048503, guid: 1689f4978ca2b5445ab67a64200be66e, type: 3}
 --- !u!1 &1893853797
 GameObject:
   m_ObjectHideFlags: 0
