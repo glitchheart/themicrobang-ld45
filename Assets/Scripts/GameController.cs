@@ -55,11 +55,20 @@ public class GameController : Controller<GameController>
         Paused
     }
 
+    public enum PlayMode
+    {
+        MovingAround,
+        Placing
+    }
+
     [SerializeField]
     private Transform _cameraOrbit;
 
     [SerializeField]
     private GameMode _gameMode;
+
+    private PlayMode _playMode;
+    private GameObject _planetToPlace;
 
     [SerializeField]
     private PlayableDirector _introPlayable;
@@ -68,10 +77,16 @@ public class GameController : Controller<GameController>
     private Queue<GameCommand> _gameCommands;
 
     private Vector3 _lastMousePosition;
-    private float _rotateSpeed = 10.0f;
+
+    [SerializeField]
+    private float _rotateSpeed = 2.0f;
+    private float _scrollSpeed = 2.0f;
+
+    public SphericalCoordinates sc;
 
     protected override void OnAwake()
     {
+        sc = new SphericalCoordinates(transform.position, 3f, 10f, 0f, Mathf.PI * 2f, 0f, Mathf.PI / 4f);
         _gameCommands = new Queue<GameCommand>();
     }
 
@@ -93,28 +108,40 @@ public class GameController : Controller<GameController>
                     }
                     break;
                 case GameMode.Playing:
-                    if (Input.GetMouseButton(0))
+                    if(_playMode == PlayMode.MovingAround)
                     {
-                        float h = _rotateSpeed * Input.GetAxis("Mouse X");
-                        float v = _rotateSpeed * Input.GetAxis("Mouse Y");
+                        if (Input.GetMouseButtonDown(0))
+                        {
+                            var planet = PrefabController.Instance.GetPrefabInstance(PrefabController.PLANET1_PREFAB);
+                            planet.transform.position = CameraController.Instance.CurrentCamera.transform.position + CameraController.Instance.CurrentCamera.transform.forward * 10.0f;
+                            _planetToPlace = planet;
+                        }
+                        else if (Input.GetMouseButton(1))
+                        {
+                            float h = _rotateSpeed * Input.GetAxis("Mouse X");
+                            float v = _rotateSpeed * Input.GetAxis("Mouse Y");
+                            _cameraOrbit.transform.RotateAroundLocal(_cameraOrbit.transform.right, h * _rotateSpeed * Time.deltaTime);
+                            _cameraOrbit.transform.RotateAroundLocal(_cameraOrbit.transform.up, v * _rotateSpeed * Time.deltaTime);
+                        }
 
-                        if (_cameraOrbit.eulerAngles.z + v <= 0.1f || _cameraOrbit.eulerAngles.z + v >= 270.0f)
-                            v = 0;
+                        float scrollFactor = Input.GetAxis("Mouse ScrollWheel");
 
-                        _cameraOrbit.eulerAngles = new Vector3(_cameraOrbit.eulerAngles.x,
-                                                               _cameraOrbit.eulerAngles.y + h,
-                                                               _cameraOrbit.eulerAngles.z + v);
+                        _cameraOrbit.transform.localScale = _cameraOrbit.transform.localScale * (1f - scrollFactor);
+                    }
+                    else if(_playMode == PlayMode.Placing)
+                    {
+                        if(Input.GetMouseButton(0))
+                        {
+                            
+                        }
+
+                        if(Input.GetMouseButtonUp(0))
+                        {
+                            _playMode = PlayMode.MovingAround;
+                            _planetToPlace = null;
+                        }
                     }
 
-                    float scrollFactor = Input.GetAxis("Mouse ScrollWheel");
-
-                    if (scrollFactor != 0)
-                    {
-                        _cameraOrbit.localScale = _cameraOrbit.localScale * (1f - scrollFactor);
-                    }
-
-                    CameraController.Instance.CurrentCamera.transform.rotation = Quaternion.Euler(CameraController.Instance.CurrentCamera.transform.rotation.x, CameraController.Instance.CurrentCamera.transform.rotation.y, 0);
-                    CameraController.Instance.CurrentCamera.transform.LookAt(_cameraOrbit.position);
                     break;
                 case GameMode.Paused:
                     break;

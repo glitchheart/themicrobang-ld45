@@ -31,6 +31,7 @@ public class Star : MonoBehaviour
 
     private void Awake()
     {
+        _audioSource.Play();
         _animScaleUp = Animator.StringToHash("scaleUp");
     }
 
