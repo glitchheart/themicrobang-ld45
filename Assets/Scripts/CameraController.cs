@@ -2,29 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraController : MonoBehaviour
+public class CameraController : Controller<CameraController>
 {
     public const int INTRO_CAMERA = 1;
     public const int INITIAL_PLAY_CAMERA = 2;
-
-    public static CameraController Instance;
 
     private Dictionary<int, GameCamera> _gameCameras;
 
     public GameCamera CurrentCamera { get; private set; }
 
-    private void Awake()
+    protected override void OnAwake()
     {
-        if(Instance == null)
-        {
-            Instance = this;
-        }
-        else if(Instance != this)
-        {
-            DestroyImmediate(gameObject);
-            return;
-        }
-
         _gameCameras = new Dictionary<int, GameCamera>();
 
         var cameras = FindObjectsOfType<GameCamera>();
