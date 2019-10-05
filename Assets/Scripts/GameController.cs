@@ -5,6 +5,16 @@ using UnityEngine.Playables;
 
 public class GameController : MonoBehaviour
 {
+    public interface IGameCommand
+    {
+    }
+
+    public struct SpawnStarCommand
+    {
+        public Bounds Bounds;
+        public int Amount;
+    }
+
     public enum GameMode
     {
         Intro,
@@ -17,6 +27,13 @@ public class GameController : MonoBehaviour
 
     [SerializeField]
     private PlayableDirector _introPlayable;
+
+    private Queue<IGameCommand> _gameCommands;
+
+    private void Start()
+    {
+        CameraController.Instance.SwitchToCamera(CameraController.INTRO_CAMERA);
+    }
 
     private void Update()
     {
@@ -33,5 +50,12 @@ public class GameController : MonoBehaviour
             case GameMode.Paused:
                 break;
         }
+    }
+
+    public void StartPlayMode()
+    {
+        HelpUIController.Instance.SetHelpTextEnabled(false);
+        CameraController.Instance.SwitchToCamera(CameraController.INITIAL_PLAY_CAMERA);
+        CameraController.Instance.CurrentCamera.CameraOrbit.Running = false;
     }
 }

@@ -4,15 +4,31 @@ using UnityEngine;
 
 public class HelpUIController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public static HelpUIController Instance;
+
+    [SerializeField]
+    private TMPro.TextMeshProUGUI _helpText;
+
+    private void Awake()
     {
-        
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else if (Instance != this)
+        {
+            DestroyImmediate(gameObject);
+            return;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ShowHelpText(string text)
     {
-        
+        _helpText.text = text;
+    }
+
+    public void SetHelpTextEnabled(bool enabled)
+    {
+        _helpText.enabled = enabled;
     }
 }
