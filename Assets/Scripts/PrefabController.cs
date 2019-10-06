@@ -49,7 +49,7 @@ public class PrefabController : Controller<PrefabController>
 
     public Planet GetRandomPlanet()
     {
-        var planet = Instantiate(_planets[Random.Range(0, _planets.Count - 1)]);
+        var planet = Instantiate(_planets[Random.Range(0, _planets.Count)]);
         return planet;
     }
 
