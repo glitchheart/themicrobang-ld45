@@ -18,7 +18,7 @@ public class Universe : MonoBehaviour
         if(_ringCount < _maxRings)
         {
             var planet = PrefabController.Instance.GetRandomPlanet();
-            planet.Name = _planetNames[Random.Range(0, _planetNames.Length - 1)];
+            planet.Name = _planetNames[Random.Range(0, _planetNames.Length)];
 
             Vector3 dir = new Vector3(Random.Range(-1.0f, 1.0f), 0, Random.Range(-1.0f, 1.0f)).normalized;
             planet.transform.position = dir * (8 + _ringCount++ * 3.0f);

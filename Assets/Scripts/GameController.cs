@@ -66,6 +66,12 @@ public class GameController : Controller<GameController>
     private int _animFade;
     #endregion
 
+<<<<<<< HEAD
+=======
+    [SerializeField]
+    private LayerMask _planetLayer;
+
+>>>>>>> de611ca4a63c88b1c3abdefc59fc9470b5f4b711
     [SerializeField]
     private Universe _universe;
 
@@ -115,6 +121,7 @@ public class GameController : Controller<GameController>
 
     public void PlacePlanet()
     {
+<<<<<<< HEAD
         Planet planet = _universe.PlaceNextPlanet();
         if(planet != null)
         {
@@ -135,6 +142,9 @@ public class GameController : Controller<GameController>
             _planetTextAnimator.SetTrigger(_animFade);
             _planetButton.SetActive(false);
         }
+=======
+        _universe.PlaceNextPlanet();
+>>>>>>> de611ca4a63c88b1c3abdefc59fc9470b5f4b711
     }
 
     private void Update()
@@ -153,6 +163,13 @@ public class GameController : Controller<GameController>
                     if(_playMode == PlayMode.PlanetCloseUp)
                     {
                         _planetText.text = $"Name: {_currentPlanet.Name}\nPopulation: {_currentPlanet.Population}";
+
+                        if(Input.GetKeyDown(KeyCode.Escape))
+                        {
+                            _planetTextAnimator.SetTrigger(_animFade);
+                            _playMode = PlayMode.MovingAround;
+                            CameraController.Instance.SwitchToCamera(CameraController.INITIAL_PLAY_CAMERA);
+                        }
                     }
                     else if (_playMode == PlayMode.MovingAround) // || _playMode == PlayMode.PlanetCloseUp)
                     {
@@ -167,6 +184,7 @@ public class GameController : Controller<GameController>
                         float scrollFactor = Input.GetAxis("Mouse ScrollWheel");
 
                         _cameraOrbit.transform.localScale = _cameraOrbit.transform.localScale * (1f - scrollFactor);
+<<<<<<< HEAD
                     }
                     else if(_playMode == PlayMode.Placing)
                     {
@@ -176,14 +194,54 @@ public class GameController : Controller<GameController>
                         }
 
                         if(Input.GetMouseButtonUp(0))
+=======
+
+                        if(Input.GetMouseButtonDown(0))
+>>>>>>> de611ca4a63c88b1c3abdefc59fc9470b5f4b711
                         {
-                            //_playMode = PlayMode.MovingAround;
+                            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                            if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, _planetLayer))
+                            {
+                                var planet = hit.collider.GetComponent<Planet>();
+                                if (planet != null)
+                                {
+                                    _currentPlanet = planet;
+                                    _playMode = PlayMode.PlanetCloseUp;
+                                    CameraController.Instance.SwitchToCamera(CameraController.PLANET_CAMERA);
+                                    var planetCamera = CameraController.Instance.CurrentCamera;
+                                    planetCamera.transform.parent = planet.transform;
+                                    planetCamera.transform.localPosition = new Vector3(0, 0, -5);
+                                    planetCamera.transform.localRotation = Quaternion.identity;
+                                    _planetText.text = $"Name: {planet.Name}\nPopulation: {planet.Population}";
+                                    _planetTextAnimator.SetTrigger(_animFade);
+                                    _planetButton.SetActive(false);
+                                }
+                            }
                         }
                     }
+<<<<<<< HEAD
 
                     break;
                 case GameMode.Paused:
                     break;
+=======
+                    //else if(_playMode == PlayMode.Placing)
+                    //{
+                    //    if(Input.GetMouseButton(0))
+                    //    {
+                            
+                    //    }
+
+                    //    if(Input.GetMouseButtonUp(0))
+                    //    {
+                    //        //_playMode = PlayMode.MovingAround;
+                    //    }
+                    //}
+
+                    break;
+                case GameMode.Paused:
+                    break;
+>>>>>>> de611ca4a63c88b1c3abdefc59fc9470b5f4b711
             }
         }
     }
@@ -197,6 +255,11 @@ public class GameController : Controller<GameController>
         QueueCommand(new SpawnStarCommand { Amount = 20, Radius = 50, Delay = 0.1f, Callback = () =>
         {
             _gameMode = GameMode.Playing;
+
+            for (int i = 0; i < 3; i++)
+            {
+                PlacePlanet();
+            }
         } });
     }
 
