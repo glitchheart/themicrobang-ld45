@@ -80,6 +80,10 @@ public class GameController : Controller<GameController>
 
     [SerializeField]
     private TMPro.TextMeshProUGUI _planetText;
+
+    [SerializeField]
+    private RectTransform _growthArrow;
+
     [SerializeField]
     private GameObject _planetButton;
     private Animator _planetTextAnimator;
@@ -120,7 +124,14 @@ public class GameController : Controller<GameController>
             var planetCamera = CameraController.Instance.CurrentCamera;
             planetCamera.transform.parent = planet.transform;
             planetCamera.transform.localPosition = new Vector3(0, 0, -5);
-            _planetText.text = $"Name: {planet.Name}\nPopulation: {planet.Population}";
+            _planetText.text = $"Name: {planet.Name}\nPopulation:";
+
+            float growthRotation = 0.0f;
+            float growth = planet.Data.Growth;
+
+                        
+
+            _growthArrow.rotation = Quaternion.Euler(0, 0, growthRotation);
             _planetTextAnimator.SetTrigger(_animFade);
             _planetButton.SetActive(false);
         }

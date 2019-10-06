@@ -4,12 +4,32 @@ using UnityEngine;
 
 public class Planet : MonoBehaviour
 {
-    public struct PlanetState
+    public enum PlanetState
     {
+        Balanced,
+        Critical,
+        Extinction,
+        Desperation,
+        Prosperous
+    }
+
+    public enum PopulationType
+    {
+        Technological,
+        Environmental
+    }
+
+    public struct PlanetData
+    {
+        public int Growth;
+        private int _population;
+        public PlanetState State;
+        public PopulationType Type;
     }
 
     public string Name;
-    public int Population;
+    // public int Population;
+    public PlanetData Data;
 
     private GameObject _child;
 
@@ -41,7 +61,7 @@ public class Planet : MonoBehaviour
         // TODO: Add more stuff. States?
         if(_time > _timeBeforePopulationGrow)
         {
-            Population += 1;
+            Data.Growth += 1;
             _time = 0.0f;
         }
     }
