@@ -58,8 +58,13 @@ public class GameController : Controller<GameController>
     public enum PlayMode
     {
         MovingAround,
-        Placing
+        Placing,
+        PlanetCloseUp
     }
+
+    #region animator hashes
+    private int _animFade;
+    #endregion
 
     [SerializeField]
     private Universe _universe;
@@ -71,7 +76,13 @@ public class GameController : Controller<GameController>
     private GameMode _gameMode;
 
     private PlayMode _playMode;
-    private GameObject _planetToPlace;
+    private Planet _currentPlanet;
+
+    [SerializeField]
+    private TMPro.TextMeshProUGUI _planetText;
+    [SerializeField]
+    private GameObject _planetButton;
+    private Animator _planetTextAnimator;
 
     [SerializeField]
     private PlayableDirector _introPlayable;
@@ -81,16 +92,16 @@ public class GameController : Controller<GameController>
 
     private Vector3 _lastMousePosition;
 
+
     [SerializeField]
     private float _rotateSpeed = 2.0f;
     private float _scrollSpeed = 2.0f;
 
-    public SphericalCoordinates sc;
-
     protected override void OnAwake()
     {
-        sc = new SphericalCoordinates(transform.position, 3f, 10f, 0f, Mathf.PI * 2f, 0f, Mathf.PI / 4f);
+        _animFade = Animator.StringToHash("fade");
         _gameCommands = new Queue<GameCommand>();
+        _planetTextAnimator = _planetText.GetComponent<Animator>();
     }
 
     private void Start()
@@ -100,7 +111,19 @@ public class GameController : Controller<GameController>
 
     public void PlacePlanet()
     {
-        _universe.PlaceNextPlanet();
+        Planet planet = _universe.PlaceNextPlanet();
+        if(planet != null)
+        {
+            _currentPlanet = planet;
+            _playMode = PlayMode.PlanetCloseUp;
+            CameraController.Instance.SwitchToCamera(CameraController.PLANET_CAMERA);
+            var planetCamera = CameraController.Instance.CurrentCamera;
+            planetCamera.transform.parent = planet.transform;
+            planetCamera.transform.localPosition = new Vector3(0, 0, -5);
+            _planetText.text = $"Name: {planet.Name}\nPopulation: {planet.Population}";
+            _planetTextAnimator.SetTrigger(_animFade);
+            _planetButton.SetActive(false);
+        }
     }
 
     private void Update()
@@ -116,7 +139,11 @@ public class GameController : Controller<GameController>
                     }
                     break;
                 case GameMode.Playing:
-                    if(_playMode == PlayMode.MovingAround)
+                    if(_playMode == PlayMode.PlanetCloseUp)
+                    {
+                        _planetText.text = $"Name: {_currentPlanet.Name}\nPopulation: {_currentPlanet.Population}";
+                    }
+                    else if (_playMode == PlayMode.MovingAround) // || _playMode == PlayMode.PlanetCloseUp)
                     {
                         if (Input.GetMouseButton(1))
                         {
@@ -139,8 +166,7 @@ public class GameController : Controller<GameController>
 
                         if(Input.GetMouseButtonUp(0))
                         {
-                            _playMode = PlayMode.MovingAround;
-                            _planetToPlace = null;
+                            //_playMode = PlayMode.MovingAround;
                         }
                     }
 

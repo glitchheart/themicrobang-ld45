@@ -6,6 +6,7 @@ public class CameraController : Controller<CameraController>
 {
     public const int INTRO_CAMERA = 1;
     public const int INITIAL_PLAY_CAMERA = 2;
+    public const int PLANET_CAMERA = 3;
 
     private Dictionary<int, GameCamera> _gameCameras;
 
