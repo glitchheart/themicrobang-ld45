@@ -213,7 +213,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &62216811
 RectTransform:
   m_ObjectHideFlags: 0
@@ -349,14 +349,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 281269387}
-  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: -179.7}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1401724039}
   m_Father: {fileID: 1299951882}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &281269389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5236,7 +5236,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 16777215
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -5459,10 +5459,13 @@ PlayableDirector:
     value: {fileID: 0}
   - key: {fileID: 2148796441828741262, guid: cf27f74398a5e4575a2eff3bd8fd9cce, type: 2}
     value: {fileID: 0}
+  - key: {fileID: -5155764260063120900, guid: cf27f74398a5e4575a2eff3bd8fd9cce, type: 2}
+    value: {fileID: 507916939}
   m_ExposedReferences:
     m_References:
     - 537a1a7c739a148c8ac6575e1eb8db0e: {fileID: 1564086896}
     - fc25d60edd3944b1e830fd6288eb5236: {fileID: 1338400923}
+    - 2c4f7695364b641a48607ffc1867e133: {fileID: 507916935}
 --- !u!1 &686822511
 GameObject:
   m_ObjectHideFlags: 0
@@ -5507,6 +5510,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e518bf6a84ecb404ca1a7a61f7603a2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _planetLayer:
+    serializedVersion: 2
+    m_Bits: 256
   _universe: {fileID: 771898137}
   _cameraOrbit: {fileID: 13342594}
   _gameMode: 0

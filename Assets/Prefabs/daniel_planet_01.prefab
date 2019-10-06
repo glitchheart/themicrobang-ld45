@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1477164089448170979}
   - component: {fileID: 1477164089448170976}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: planet_ring_big
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,8 @@ GameObject:
   - component: {fileID: 3197066007419766702}
   - component: {fileID: 9179123235129703255}
   - component: {fileID: 8979896413130674071}
-  m_Layer: 0
+  - component: {fileID: -564630162418591990}
+  m_Layer: 8
   m_Name: daniel_planet_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -172,3 +173,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1afac33a75ac4ecda70a94eae51f996, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Name: 
+  Population: 0
+--- !u!135 &-564630162418591990
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7448423817839546251}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.013748065
+  m_Center: {x: 0.00003704727, y: 0.0037480684, z: -0.00000024139882}
