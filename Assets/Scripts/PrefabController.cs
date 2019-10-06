@@ -27,6 +27,8 @@ public class PrefabController : Controller<PrefabController>
 {
     public const int STAR_PREFAB = 0;
     public const int PLANET1_PREFAB = 1;
+    public const int PLANET2_PREFAB = 2;
+    public const int GEAR_PREFAB = 3;
 
     [SerializeField]
     private GameObject[] _prefabs;
