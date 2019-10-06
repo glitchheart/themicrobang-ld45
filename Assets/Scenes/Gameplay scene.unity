@@ -5205,7 +5205,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 100}
+  m_AnchoredPosition: {x: 0, y: 137.9}
   m_SizeDelta: {x: 2092, y: 76.399994}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &507916937
@@ -5236,7 +5236,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 16777215
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -5517,6 +5517,7 @@ MonoBehaviour:
   _cameraOrbit: {fileID: 13342594}
   _gameMode: 0
   _planetText: {fileID: 2134608024}
+  _growthArrow: {fileID: 2070080746}
   _planetButton: {fileID: 62216810}
   _introPlayable: {fileID: 633638024}
   _rotateSpeed: 2
@@ -7469,7 +7470,7 @@ GameObject:
   - component: {fileID: 2070080748}
   - component: {fileID: 2070080747}
   m_Layer: 5
-  m_Name: Image
+  m_Name: GrowthArrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7491,8 +7492,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 44.5, y: 1.1}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchoredPosition: {x: 37.7, y: -1.6}
+  m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2070080747
 MonoBehaviour:
@@ -7566,7 +7567,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 49.9}
+  m_AnchoredPosition: {x: 0, y: 99.7}
   m_SizeDelta: {x: 2092, y: 76.399994}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &2134608023
@@ -7608,6 +7609,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Name: Givarbum
 
+    Population: 200
 
     Growth:'
   m_isRightToLeft: 0
@@ -7679,10 +7681,10 @@ MonoBehaviour:
   m_margin: {x: 128.93164, y: -1.3615265, z: 131.73438, w: 2.802845}
   m_textInfo:
     textComponent: {fileID: 2134608024}
-    characterCount: 23
+    characterCount: 38
     spriteCount: 0
-    spaceCount: 3
-    wordCount: 3
+    spaceCount: 4
+    wordCount: 5
     linkCount: 0
     lineCount: 3
     pageCount: 1
