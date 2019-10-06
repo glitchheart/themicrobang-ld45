@@ -22,13 +22,19 @@ public abstract class Controller<T> : MonoBehaviour where T : MonoBehaviour
 
     protected virtual void OnAwake() { }
 }
-
+public enum PrefabType
+{
+    Star = 0,
+    Planet1 = 1,
+    Planet2 = 2,
+    Gear = 3,
+    GearCloud = 4,
+    Spaceship = 5,
+    Building = 6
+}
 public class PrefabController : Controller<PrefabController>
 {
-    public const int STAR_PREFAB = 0;
-    public const int PLANET1_PREFAB = 1;
-    public const int PLANET2_PREFAB = 2;
-    public const int GEAR_PREFAB = 3;
+    
 
     [SerializeField]
     private GameObject[] _prefabs;
@@ -55,9 +61,9 @@ public class PrefabController : Controller<PrefabController>
         return planet;
     }
 
-    public GameObject GetPrefabInstance(int index)
+    public GameObject GetPrefabInstance(PrefabType type)
     {
         // TODO: Change this to use pools at some point
-        return Instantiate(_prefabs[index]);
+        return Instantiate(_prefabs[(int)type]);
     }
 }

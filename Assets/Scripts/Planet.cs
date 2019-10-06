@@ -45,6 +45,9 @@ public class Planet : MonoBehaviour
         public int EnvironmentResource;
     }
 
+    [SerializeField]
+    private float _radius = 1.0f;
+
     public string Name;
     // public int Population;
     public PlanetData Data;
@@ -112,6 +115,15 @@ public class Planet : MonoBehaviour
         _time += Time.deltaTime;
     }
 
+    void SpawnBuilding()
+    {
+        var building = PrefabController.Instance.GetPrefabInstance(PrefabType.Building);
+        Vector3 dir = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized;
+        building.transform.position = transform.position + dir * _radius;
+        building.transform.up = dir;
+        building.transform.parent = transform;
+    }
+
     void Evolve()
     {
         // TODO: Add more stuff. States?
@@ -158,6 +170,7 @@ public class Planet : MonoBehaviour
             else if (Data.EnvironmentResource < RESOURCE_VERY_HIGH && Data.TechResource < RESOURCE_VERY_HIGH)
             {
                 Data.State = Planet.PlanetState.Balanced;
+                SpawnBuilding();
             }
 
             float growthRandom = Random.Range(0.0f, 1.0f);

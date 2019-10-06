@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: rocketship window
+  m_Name: Rocket Ship Window
   m_Shader: {fileID: -6465566751694194690, guid: 723f156cf45694f94b4b5e3e5066615c,
     type: 3}
   m_ShaderKeywords: 
