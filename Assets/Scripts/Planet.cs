@@ -60,6 +60,8 @@ public class Planet : PrefabObject
     private Vector3 _center;
     private float _speed;
 
+    public WarningArrow WarningArrow;
+
     private float _timeBeforePopulationGrow = 2.0f;
     private float _time;
 
@@ -134,6 +136,7 @@ public class Planet : PrefabObject
         _buildings.Add(building.GetComponent<Building>());
     }
 
+
     void SpawnAlien()
     {
         var alien = PrefabController.Instance.GetPrefabInstance<Alien>(PrefabType.Alien);
@@ -188,10 +191,12 @@ public class Planet : PrefabObject
             else if (Data.EnvironmentResource < RESOURCE_HIGH && Data.TechResource < RESOURCE_HIGH)
             {
                 Data.State = Planet.PlanetState.Critical;
+                WarningArrow.gameObject.SetActive(true);
             }
             else if (Data.EnvironmentResource < RESOURCE_VERY_HIGH && Data.TechResource < RESOURCE_VERY_HIGH)
             {
                 Data.State = Planet.PlanetState.Balanced;
+                WarningArrow.gameObject.SetActive(false);
                 SpawnBuilding();
             }
 

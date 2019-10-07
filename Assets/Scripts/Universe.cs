@@ -74,6 +74,12 @@ public class Universe : MonoBehaviour
             planet.transform.position = dir * (_ringCount * 10.0f);
             planet.Orbit(Vector3.zero, Random.Range(10, 20));
 
+            var warningArrow = PrefabController.Instance.GetPrefabInstance(PrefabType.WarningArrow);
+            warningArrow.transform.parent = planet.transform;
+            warningArrow.transform.position = planet.transform.position + Vector3.up * 5.0f;
+            warningArrow.SetActive(false);
+            planet.WarningArrow = warningArrow.GetComponent<WarningArrow>();
+
             var circle = PrefabController.Instance.GetPrefabInstance(PrefabType.UniverseCircle);
             circle.transform.position = Vector3.zero;
             float width = (_ringCount) * 20.0f;
