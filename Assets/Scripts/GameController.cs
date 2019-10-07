@@ -519,6 +519,11 @@ public class GameController : Controller<GameController>
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
     public void StartPlayMode()
     {
         HelpUIController.Instance.SetHelpTextEnabled(false);
