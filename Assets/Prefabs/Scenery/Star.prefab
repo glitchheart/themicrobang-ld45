@@ -124,6 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1f8d80f03ac94788badcdd55086b6a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Type: 0
   _audioSource: {fileID: 9082079270290497774}
   _animator: {fileID: 210040894}
 --- !u!95 &210040894
@@ -231,7 +232,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
+      value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 0

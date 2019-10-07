@@ -472,6 +472,12 @@ public class GameController : Controller<GameController>
                     PlacePlanet();
                 }
 
+                for(int i = 0; i < 4; i++)
+                {
+                    _universe.SpawnResources(Planet.ResourceType.Environment);
+                    _universe.SpawnResources(Planet.ResourceType.Tech);
+                }
+
                 CameraController.Instance.CurrentCamera.GetComponent<FirstPersonCamera>().Active = true;
 
                 // TODO: Show movement controls!

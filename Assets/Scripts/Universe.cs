@@ -16,15 +16,13 @@ public class Universe : MonoBehaviour
     private void Start()
     {
         Planets = new List<Planet>();
-        SpawnResources(Planet.ResourceType.Environment);
-        SpawnResources(Planet.ResourceType.Tech);
     }
 
     public void SpawnResources(Planet.ResourceType resourceType)
     {
         var cloud = PrefabController.Instance.GetPrefabInstance<ResourceCloud>(PrefabType.ResourceCloud);
         cloud.SpawnWithType(resourceType);
-        cloud.transform.position = new Vector3(Random.Range(-100.0f, 100.0f), Random.Range(-100.0f, 100.0f), Random.Range(-100.0f, 100.0f));
+        cloud.transform.position = new Vector3(Random.Range(-90.0f, 90.0f), Random.Range(-90.0f, 90.0f), Random.Range(-90.0f, 90.0f));
     }
 
     public Planet PlaceNextPlanet()
