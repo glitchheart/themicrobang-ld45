@@ -43,6 +43,8 @@ public class Spaceship : PrefabObject
 
     private int _takenAmount;
 
+    public RocketCamera RocketCamera;
+
     public void TakeOff(Planet originPlanet, Planet destinationPlanet, Intent intent)
     {
         OriginPlanet = originPlanet;
@@ -169,6 +171,12 @@ public class Spaceship : PrefabObject
         explosion.Explode();
         OriginPlanet.DespawnAlien(Alien);
         GameController.Instance.RemoveShip(this);
+
+        if (RocketCamera.transform.parent == transform)
+        {
+            RocketCamera.transform.parent = null;
+        }
+
         Destroy(gameObject);
     }
 
@@ -218,6 +226,10 @@ public class Spaceship : PrefabObject
                         break;
                 }
                 _state = State.Idle;
+                if(RocketCamera.transform.parent == transform)
+                {
+                    RocketCamera.transform.parent = null;
+                }
                 Destroy(gameObject);
             }
             else

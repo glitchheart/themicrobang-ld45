@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.SceneManagement;
 
 public class GameController : Controller<GameController>
 {
@@ -95,6 +96,9 @@ public class GameController : Controller<GameController>
     private PlayMode _playMode;
     private Planet _currentPlanet;
     private ResourceCloud _currentCloud;
+
+    [SerializeField]
+    private AudioSource _shipSound;
 
     [SerializeField]
     private TMPro.TextMeshProUGUI _planetText;
@@ -341,17 +345,29 @@ public class GameController : Controller<GameController>
                     }
                     break;
                 case GameMode.Playing:
+                    if(_spaceShips.Count > 0)
+                    {
+                        if(!_shipSound.isPlaying)
+                            _shipSound.Play();
+                    }
+                    else
+                    {
+                        _shipSound.Stop();
+                    }
+
                     if (_resourcesOnTheWay.Count > 0)
                     {
                         foreach (var resource in _resourcesOnTheWay)
                         {
-                            if (Vector3.Distance(resource.transform.position, resource.Destination) < 1.0f)
+                            float distance = Vector3.Distance(resource.transform.position, resource.Destination);
+                            if (distance < 1.0f)
                             {
                                 CollectResource(resource);
                             }
                             else
                             {
                                 resource.transform.Translate((resource.Destination - resource.transform.position) * 10 * Time.deltaTime);
+                                resource.transform.localScale -= new Vector3(0.5f, 0.5f, 0.5f) * Time.deltaTime;
                             }
                         }
 
@@ -484,6 +500,7 @@ public class GameController : Controller<GameController>
         _spaceShips.Add(ship);
         ship.transform.position = alienThatWantsToTravel.transform.position;
         ship.transform.up = alienThatWantsToTravel.transform.up;
+        ship.transform.position -= ship.transform.up * 1.0f;
         alienThatWantsToTravel.transform.parent = alienThatWantsToTravel.transform;
         alienThatWantsToTravel.transform.localPosition = Vector3.zero;
         ship.transform.parent = alienThatWantsToTravel.transform;
@@ -495,6 +512,11 @@ public class GameController : Controller<GameController>
     public void IntroDone()
     {
         _gameMode = GameMode.Intro;
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void StartPlayMode()
@@ -521,6 +543,8 @@ public class GameController : Controller<GameController>
                     _universe.SpawnResources(Planet.ResourceType.Environment);
                     _universe.SpawnResources(Planet.ResourceType.Tech);
                 }
+
+                _universe.StartSpawning();
 
                 CameraController.Instance.CurrentCamera.GetComponent<FirstPersonCamera>().Active = true;
 

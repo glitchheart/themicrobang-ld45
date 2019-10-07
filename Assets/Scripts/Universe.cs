@@ -18,6 +18,26 @@ public class Universe : MonoBehaviour
         Planets = new List<Planet>();
     }
 
+    public void StartSpawning()
+    {
+        StartCoroutine(ResourceSpawnDelay());
+    }
+
+    IEnumerator ResourceSpawnDelay()
+    {
+        yield return new WaitForSeconds(Random.Range(5.0f, 10.0f));
+        if(Random.Range(0.0f, 1.0f) < 0.5f)
+        {
+            SpawnResources(Planet.ResourceType.Environment);
+        }
+        else
+        {
+            SpawnResources(Planet.ResourceType.Tech);    
+        }
+
+        StartCoroutine(ResourceSpawnDelay());
+    }
+
     public void SpawnResources(Planet.ResourceType resourceType)
     {
         var cloud = PrefabController.Instance.GetPrefabInstance<ResourceCloud>(PrefabType.ResourceCloud);

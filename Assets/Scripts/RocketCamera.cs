@@ -20,6 +20,8 @@ public class RocketCamera : MonoBehaviour
 
     public void ShowShip(Transform shipTransform)
     {
+        shipTransform.GetComponent<Spaceship>().RocketCamera = this;
+
         if(!_enabled)
         {
             _animator.SetTrigger(_animToggleCam);
@@ -28,8 +30,8 @@ public class RocketCamera : MonoBehaviour
         _enabled = true;
 
         transform.parent = shipTransform;
+        transform.localPosition = new Vector3(-3, 0, 0);
         transform.LookAt(shipTransform.position);
-        transform.position = -transform.forward * 2.0f;
     }
 
     public void TurnOff()
