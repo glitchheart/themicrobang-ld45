@@ -9,7 +9,8 @@ public class Alien : PrefabObject
         Idle,
         Walking,
         Applauding,
-        Angry
+        Angry,
+        InShip
     }
 
     #region animator hashes
@@ -17,6 +18,8 @@ public class Alien : PrefabObject
     private int _animWalk;
     private int _animYay;
     #endregion
+
+    public Planet OriginPlanet;
 
     [SerializeField]
     private AlienState _state;
@@ -98,11 +101,16 @@ public class Alien : PrefabObject
                 {
                     int rand = Random.Range(0, 100);
 
-                    if (rand < 10)
+                    if (rand < 2)
+                    {
+                        GameController.Instance.InstantiateRocketShip(this);
+                        _state = AlienState.InShip;
+                    }
+                    else if (rand < 10)
                     {
                         State = AlienState.Applauding;
                     }
-                    if (rand < 20)
+                    else if (rand < 20)
                     {
                         State = AlienState.Idle;
                     }

@@ -456,6 +456,16 @@ public class GameController : Controller<GameController>
         _environmentResourceText.text = $"{EnvironmentAmount}";
     }
 
+    public void InstantiateRocketShip(Alien alienThatWantsToTravel)
+    {
+        var ship = PrefabController.Instance.GetPrefabInstance<Spaceship>(PrefabType.Spaceship);
+        ship.transform.position = alienThatWantsToTravel.transform.position;
+        ship.transform.up = alienThatWantsToTravel.transform.up;
+        alienThatWantsToTravel.transform.parent = alienThatWantsToTravel.transform;
+        alienThatWantsToTravel.transform.localPosition = Vector3.zero;
+        ship.TakeOff(alienThatWantsToTravel.OriginPlanet, _universe.Planets[0], Spaceship.Intent.Kamikaze);
+    }
+
     public void StartPlayMode()
     {
         HelpUIController.Instance.SetHelpTextEnabled(false);

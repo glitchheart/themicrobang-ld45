@@ -7,7 +7,7 @@ public class Universe : MonoBehaviour
     [SerializeField]
     private string[] _planetNames;
 
-    private Planet[] _planets;
+    public List<Planet> Planets;
     private int _ringCount;
 
     [SerializeField]
@@ -15,6 +15,7 @@ public class Universe : MonoBehaviour
 
     private void Start()
     {
+        Planets = new List<Planet>();
         SpawnResources(Planet.ResourceType.Environment);
         SpawnResources(Planet.ResourceType.Tech);
     }
@@ -31,6 +32,7 @@ public class Universe : MonoBehaviour
         if(_ringCount < _maxRings)
         {
             var planet = PrefabController.Instance.GetRandomPlanet();
+            Planets.Add(planet);
             planet.Name = _planetNames[Random.Range(0, _planetNames.Length)];
             planet.Data.State = Planet.PlanetState.Balanced;
 
@@ -71,8 +73,15 @@ public class Universe : MonoBehaviour
             }
 
             Vector3 dir = new Vector3(Random.Range(-1.0f, 1.0f), 0, Random.Range(-1.0f, 1.0f)).normalized;
-            planet.transform.position = dir * (8 + _ringCount++ * 8.0f);
+            planet.transform.position = dir * (_ringCount * 10.0f);
             planet.Orbit(Vector3.zero, Random.Range(10, 20));
+
+            var circle = PrefabController.Instance.GetPrefabInstance(PrefabType.UniverseCircle);
+            circle.transform.position = Vector3.zero;
+            float width = (_ringCount) * 20.0f;
+            circle.transform.localScale = new Vector3(width, width, width);
+
+            _ringCount++;
 
             return planet;
         }
