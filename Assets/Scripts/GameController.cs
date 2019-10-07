@@ -65,6 +65,7 @@ public class GameController : Controller<GameController>
 
     #region animator hashes
     private int _animFade;
+    private int _animPopMenuBar;
     #endregion
 
     [SerializeField]
@@ -82,8 +83,22 @@ public class GameController : Controller<GameController>
     private PlayMode _playMode;
     private Planet _currentPlanet;
 
+
     [SerializeField]
     private TMPro.TextMeshProUGUI _planetText;
+
+    [SerializeField]
+    private TMPro.TextMeshProUGUI _planetPopulationText;
+
+    [SerializeField]
+    private TMPro.TextMeshProUGUI _planetStateText;
+
+    [SerializeField]
+    private TMPro.TextMeshProUGUI _environmentAmount;
+
+    [SerializeField]
+    private TMPro.TextMeshProUGUI _techAmount;
+
 
     [SerializeField]
     private RectTransform _growthArrow;
@@ -91,6 +106,9 @@ public class GameController : Controller<GameController>
     [SerializeField]
     private GameObject _planetButton;
     private Animator _planetTextAnimator;
+
+    [SerializeField]
+    private Animator _menuBarAnimator;
 
     [SerializeField]
     private PlayableDirector _introPlayable;
@@ -115,6 +133,7 @@ public class GameController : Controller<GameController>
     protected override void OnAwake()
     {
         _animFade = Animator.StringToHash("fade");
+        _animPopMenuBar = Animator.StringToHash("pop");
         _gameCommands = new Queue<GameCommand>();
         _planetTextAnimator = _planetText.GetComponent<Animator>();
         _depthOfFIeld = _postProcessVolume.profile.GetSetting<DepthOfField>();
@@ -129,6 +148,56 @@ public class GameController : Controller<GameController>
     public void PlacePlanet()
     {
         _universe.PlaceNextPlanet();
+    }
+
+    private float _resourceTimer = 0.0f;
+    
+    private const float INITIAL_RESOURCE_TIMER = 0.5f;
+    private const float FAST_RESOURCE_TIMER = 0.1f;
+    private const float FASTEST_RESOURCE_TIMER = 0.01f;
+
+    private float _currentResourceTimer = INITIAL_RESOURCE_TIMER;
+    private int _totalResourceCount = 0;
+
+    public void ResetResourceChange()
+    {
+        _resourceTimer = 0.0f;
+        _totalResourceCount = 0;
+        _currentResourceTimer = INITIAL_RESOURCE_TIMER;
+    }
+
+    public void ChangeResource(Planet.ResourceType type, bool take)
+    {
+        if (_resourceTimer < 0.0f)
+        {
+            int change = take ? -5 : 5;
+            switch (type)
+            {
+                case Planet.ResourceType.Environment:
+                    _currentPlanet.Data.EnvironmentResource += change;
+                    _currentPlanet.Data.EnvironmentResource = Mathf.Max(0, _currentPlanet.Data.EnvironmentResource);
+                    break;
+                case Planet.ResourceType.Tech:
+                    _currentPlanet.Data.TechResource += change;
+                    _currentPlanet.Data.TechResource = Mathf.Max(0, _currentPlanet.Data.TechResource);
+                    break;
+            }
+            _resourceTimer = _currentResourceTimer;
+            _totalResourceCount++;
+        }
+        else
+        {
+            _resourceTimer -= Time.deltaTime;
+
+            if(_totalResourceCount > 20)
+            {
+                _currentResourceTimer = FASTEST_RESOURCE_TIMER;
+            }
+            else if(_totalResourceCount > 3)
+            {
+                _currentResourceTimer = FAST_RESOURCE_TIMER;
+            }
+        }
     }
 
     float GetGrowthArrowRotation(Planet planet)
@@ -185,11 +254,18 @@ public class GameController : Controller<GameController>
                 break;
         }
 
-        _planetText.text = $"Name: {planet.Name}\nPopulation: {planet.Data.Population}\nGrowth: {planet.Data.Growth}\n";
-        _planetText.text += $"EvoState: {(planet.Data.EvolutionState == Planet.EvolutionState.Environment ? "Environment" : "Technology")}\n";
-        _planetText.text += $"Planet State: {planetState}\n";
-        _planetText.text += $"Tech: {planet.Data.TechResource}\n";
-        _planetText.text += $"Environment: {planet.Data.EnvironmentResource}\n";
+        _planetText.text = planet.Name;
+        _planetPopulationText.text = $"{planet.Data.Population}";
+        _planetStateText.text = planetState;
+
+        // _planetText.text = $"Name: {planet.Name}\nPopulation: {planet.Data.Population}\nGrowth: {planet.Data.Growth}\n";
+        // _planetText.text += $"EvoState: {(planet.Data.EvolutionState == Planet.EvolutionState.Environment ? "Environment" : "Technology")}\n";
+        // _planetText.text += $"Planet State: {planetState}\n";
+        // _planetText.text += $"Tech: {planet.Data.TechResource}\n";
+        // _planetText.text += $"Environment: {planet.Data.EnvironmentResource}\n";
+
+        _environmentAmount.text = $"{planet.Data.EnvironmentResource}";
+        _techAmount.text = $"{planet.Data.TechResource}";
     }
 
     private void Update()
