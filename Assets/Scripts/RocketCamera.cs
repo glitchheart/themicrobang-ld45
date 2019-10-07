@@ -28,8 +28,8 @@ public class RocketCamera : MonoBehaviour
         _enabled = true;
 
         transform.parent = shipTransform;
-        transform.position = -transform.forward * 2.0f;
         transform.LookAt(shipTransform.position);
+        transform.position = -transform.forward * 2.0f;
     }
 
     public void TurnOff()
