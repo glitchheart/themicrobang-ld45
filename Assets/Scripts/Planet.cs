@@ -136,12 +136,13 @@ public class Planet : PrefabObject
 
     void SpawnAlien()
     {
-        var alien = PrefabController.Instance.GetPrefabInstance(PrefabType.Alien);
+        var alien = PrefabController.Instance.GetPrefabInstance<Alien>(PrefabType.Alien);
         Vector3 dir = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized;
         alien.transform.position = transform.position + dir * _radius;
         alien.transform.up = dir;
         alien.transform.parent = transform;
-        _aliens.Add(alien.GetComponent<Alien>());
+        alien.OriginPlanet = this;
+        _aliens.Add(alien);
     }
 
     void Evolve()

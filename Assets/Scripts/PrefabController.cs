@@ -31,7 +31,9 @@ public enum PrefabType
     Spaceship,
     Building,
     Alien,
-    Tree
+    Tree,
+    UniverseCircle,
+    Explosion
 }
 
 public class PrefabController : Controller<PrefabController>
