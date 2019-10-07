@@ -27,6 +27,7 @@ public class Spaceship : PrefabObject
 
     private State _state;
 
+    public Alien Alien { get; set; }
     public Intent TravelIntent { get; private set; }
     public Planet OriginPlanet { get; private set; }
     public Planet DestinationPlanet { get; private set; }
@@ -103,6 +104,7 @@ public class Spaceship : PrefabObject
             var explosion = PrefabController.Instance.GetPrefabInstance<Explosion>(PrefabType.Explosion);
             explosion.transform.position = transform.position;
             explosion.Explode();
+            OriginPlanet.DespawnAlien(Alien);
             GameController.Instance.RemoveShip(this);
             Destroy(gameObject);
         }

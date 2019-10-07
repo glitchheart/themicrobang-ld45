@@ -488,7 +488,7 @@ public class GameController : Controller<GameController>
         alienThatWantsToTravel.transform.localPosition = Vector3.zero;
         ship.transform.parent = alienThatWantsToTravel.transform;
         ship.TakeOff(alienThatWantsToTravel.OriginPlanet, _universe.Planets[UnityEngine.Random.Range(0, _universe.Planets.Count)], Spaceship.Intent.Kamikaze);
-
+        ship.Alien = alienThatWantsToTravel;
         _rocketCam.ShowShip(ship.transform);
     }
 

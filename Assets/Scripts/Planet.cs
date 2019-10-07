@@ -147,6 +147,7 @@ public class Planet : PrefabObject
             return;
 
         var building = _buildings[Random.Range(0, _buildings.Count)];
+        _buildings.Remove(building);
         // TODO: Dust or something? Confetti?
         Destroy(building.gameObject);
     }
@@ -167,6 +168,7 @@ public class Planet : PrefabObject
             return;
 
         var bush = _bushes[Random.Range(0, _bushes.Count)];
+        _bushes.Remove(bush);
         // TODO: Dust or something? Confetti?
         Destroy(bush.gameObject);
     }
@@ -182,12 +184,15 @@ public class Planet : PrefabObject
         _aliens.Add(alien);
     }
 
-    void DespawnAlien()
+    public void DespawnAlien(Alien alien = null)
     {
         if (_aliens.Count == 0)
             return;
 
-        var alien = _aliens[Random.Range(0, _aliens.Count)];
+        if(alien == null)
+            alien = _aliens[Random.Range(0, _aliens.Count)];
+
+        _aliens.Remove(alien);
         // TODO: Dust or something? Confetti?
         Destroy(alien.gameObject);
     }

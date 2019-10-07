@@ -101,9 +101,9 @@ public class Alien : PrefabObject
                 {
                     int rand = Random.Range(0, 1000);
 
-                    if (rand < 5)
+                    if (rand < 2)
                     {
-                        if(OriginPlanet.Data.TechResource > 30)
+                        if(OriginPlanet.Data.TechResource > 2000)
                         {
                             OriginPlanet.Data.TechResource -= 10;
                             GameController.Instance.InstantiateRocketShip(this);
