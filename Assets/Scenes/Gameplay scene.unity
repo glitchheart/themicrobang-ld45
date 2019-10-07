@@ -5580,6 +5580,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 470639860}
+  - component: {fileID: 470639861}
   m_Layer: 5
   m_Name: Overview
   m_TagString: Untagged
@@ -5609,6 +5610,25 @@ RectTransform:
   m_AnchoredPosition: {x: 67.899994, y: 54.509995}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!95 &470639861
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 470639859}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4e859447be1cf2f4ba5a50c484af35f2, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &507916935
 GameObject:
   m_ObjectHideFlags: 0
@@ -6098,6 +6118,7 @@ MonoBehaviour:
   _environmentResourceText: {fileID: 1879747831}
   _planetButton: {fileID: 62216810}
   _menuBarAnimator: {fileID: 1496837274}
+  _overviewAnimator: {fileID: 470639861}
   _introPlayable: {fileID: 633638024}
   _postProcessVolume: {fileID: 1391429551}
   _rotateSpeed: 2
@@ -6540,7 +6561,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -0.00000095367, y: -16.5}
+  m_AnchoredPosition: {x: -0.0000009536707, y: -16.5}
   m_SizeDelta: {x: 80.22, y: 33}
   m_Pivot: {x: 0.5, y: 0.4999997}
 --- !u!114 &889167610
@@ -9171,6 +9192,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1770957111}
   - component: {fileID: 1770957112}
+  - component: {fileID: 1770957113}
   m_Layer: 0
   m_Name: PrefabController
   m_TagString: Untagged
@@ -9842,6 +9864,8 @@ PlayableDirector:
     value: {fileID: 1178854111}
   - key: {fileID: -4212888051597893037, guid: 4a734d183792a43b6b5e07b8b806b918, type: 2}
     value: {fileID: 686822514}
+  - key: {fileID: -4241743850524809250, guid: 4a734d183792a43b6b5e07b8b806b918, type: 2}
+    value: {fileID: 15955008}
   m_ExposedReferences:
     m_References:
     - 537a1a7c739a148c8ac6575e1eb8db0e: {fileID: 1564086896}

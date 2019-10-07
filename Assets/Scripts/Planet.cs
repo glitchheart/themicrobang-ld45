@@ -61,6 +61,8 @@ public class Planet : PrefabObject
     private Vector3 _center;
     private float _speed;
 
+    public WarningArrow WarningArrow;
+
     private float _timeBeforePopulationGrow = 2.0f;
     private float _time;
 
@@ -255,10 +257,13 @@ public class Planet : PrefabObject
             else if (Data.EnvironmentResource < RESOURCE_HIGH && Data.TechResource < RESOURCE_HIGH)
             {
                 Data.State = Planet.PlanetState.Critical;
+                WarningArrow.gameObject.SetActive(true);
             }
             else if (Data.EnvironmentResource < RESOURCE_VERY_HIGH && Data.TechResource < RESOURCE_VERY_HIGH)
             {
                 Data.State = Planet.PlanetState.Balanced;
+                WarningArrow.gameObject.SetActive(false);
+                SpawnBuilding();
 
                 if(Random.Range(0.0f, 1.0f) < 0.02f)
                 {

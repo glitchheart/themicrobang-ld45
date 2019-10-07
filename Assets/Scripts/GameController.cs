@@ -77,6 +77,7 @@ public class GameController : Controller<GameController>
     #region animator hashes
     private int _animFade;
     private int _animPopMenuBar;
+    private int _animPopOverview;
     #endregion
 
     [SerializeField]
@@ -128,6 +129,9 @@ public class GameController : Controller<GameController>
     private Animator _menuBarAnimator;
 
     [SerializeField]
+    private Animator _overviewAnimator;
+
+    [SerializeField]
     private PlayableDirector _introPlayable;
 
     private GameCommand _currentCommand;
@@ -156,6 +160,7 @@ public class GameController : Controller<GameController>
         _mainCamera = Camera.main;
         _animFade = Animator.StringToHash("fade");
         _animPopMenuBar = Animator.StringToHash("pop");
+        _animPopOverview = Animator.StringToHash("pop");
         _gameCommands = new Queue<GameCommand>();
         _planetTextAnimator = _planetText.GetComponent<Animator>();
         _depthOfField = _postProcessVolume.profile.GetSetting<DepthOfField>();
@@ -177,8 +182,8 @@ public class GameController : Controller<GameController>
 
     private float _resourceTimer = 0.0f;
 
-    private const float INITIAL_RESOURCE_TIMER = 0.5f;
-    private const float FAST_RESOURCE_TIMER = 0.1f;
+    private const float INITIAL_RESOURCE_TIMER = 0.2f;
+    private const float FAST_RESOURCE_TIMER = 0.05f;
     private const float FASTEST_RESOURCE_TIMER = 0.01f;
 
     private float _currentResourceTimer = INITIAL_RESOURCE_TIMER;
@@ -518,6 +523,8 @@ public class GameController : Controller<GameController>
                 }
 
                 CameraController.Instance.CurrentCamera.GetComponent<FirstPersonCamera>().Active = true;
+
+                _overviewAnimator.SetTrigger(_animPopOverview);
 
                 // TODO: Show movement controls!
             }

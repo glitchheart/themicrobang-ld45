@@ -37,14 +37,14 @@ public class Universe : MonoBehaviour
             if(Random.Range(0.0f, 1.0f) > 0.5f)
             {
                 planet.Data.ResourceType = Planet.ResourceType.Environment;
-                planet.Data.TechResource = 500;
-                planet.Data.EnvironmentResource = 1000;
+                planet.Data.TechResource = 250;
+                planet.Data.EnvironmentResource = 500;
             }
             else
             {
                 planet.Data.ResourceType = Planet.ResourceType.Tech;
-                planet.Data.TechResource = 1000;
-                planet.Data.EnvironmentResource = 500;
+                planet.Data.TechResource = 500;
+                planet.Data.EnvironmentResource = 250;
             }
 
             float startingGrowth = Random.Range(0.0f, 1.0f);
@@ -73,6 +73,12 @@ public class Universe : MonoBehaviour
             Vector3 dir = new Vector3(Random.Range(-1.0f, 1.0f), 0, Random.Range(-1.0f, 1.0f)).normalized;
             planet.transform.position = dir * (_ringCount * 10.0f);
             planet.Orbit(Vector3.zero, Random.Range(10, 20));
+
+            var warningArrow = PrefabController.Instance.GetPrefabInstance(PrefabType.WarningArrow);
+            warningArrow.transform.parent = planet.transform;
+            warningArrow.transform.position = planet.transform.position + Vector3.up * 5.0f;
+            warningArrow.SetActive(false);
+            planet.WarningArrow = warningArrow.GetComponent<WarningArrow>();
 
             var circle = PrefabController.Instance.GetPrefabInstance(PrefabType.UniverseCircle);
             circle.transform.position = Vector3.zero;
