@@ -9,11 +9,13 @@ public class ResourceButton : ResourceMenuButton
     [SerializeField]
     private GameController _gameController;
 
+
     [SerializeField]
     private bool take;
 
     [SerializeField]
     private Planet.ResourceType resourceType;
+
 
     public override void OnDown(PointerEventData eventData)
     {

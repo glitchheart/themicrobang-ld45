@@ -9,11 +9,24 @@ public class MainResourceButton : ResourceMenuButton
     [SerializeField]
     private GameObject _menu;
 
+    private int _animPopMenu; 
+
+    [SerializeField]
+    private Animator menuAnimator;
+
+    [SerializeField]
+    private string popString;
+
+    protected override void Start()
+    {
+        _animPopMenu = Animator.StringToHash(popString);
+    }
+
     public override void OnClicked(PointerEventData eventData)
     {
         if(eventData.button == PointerEventData.InputButton.Left)
         {
-            _menu.SetActive(!_menu.activeInHierarchy);
+            menuAnimator.SetTrigger(_animPopMenu);
         }
     }
 

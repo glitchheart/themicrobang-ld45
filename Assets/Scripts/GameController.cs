@@ -110,7 +110,10 @@ public class GameController : Controller<GameController>
     private RectTransform _growthArrow;
 
     [SerializeField]
-    private TMPro.TextMeshProUGUI _resourceText;
+    private TMPro.TextMeshProUGUI _techResourceText;
+
+    [SerializeField]
+    private TMPro.TextMeshProUGUI _environmentResourceText;
 
     [SerializeField]
     private GameObject _planetButton;
@@ -167,7 +170,7 @@ public class GameController : Controller<GameController>
     }
 
     private float _resourceTimer = 0.0f;
-    
+
     private const float INITIAL_RESOURCE_TIMER = 0.5f;
     private const float FAST_RESOURCE_TIMER = 0.1f;
     private const float FASTEST_RESOURCE_TIMER = 0.01f;
@@ -186,16 +189,25 @@ public class GameController : Controller<GameController>
     {
         if (_resourceTimer < 0.0f)
         {
-            int change = take ? -5 : 5;
+            int amount = 5;
+            int change = take ? -amount : amount;
             switch (type)
             {
                 case Planet.ResourceType.Environment:
-                    _currentPlanet.Data.EnvironmentResource += change;
-                    _currentPlanet.Data.EnvironmentResource = Mathf.Max(0, _currentPlanet.Data.EnvironmentResource);
+                    if ((take && _currentPlanet.Data.EnvironmentResource >= amount) || (!take && EnvironmentAmount >= amount))
+                    {
+                        _currentPlanet.Data.EnvironmentResource += change;
+                        EnvironmentAmount -= change;
+                        _currentPlanet.Data.EnvironmentResource = Mathf.Max(0, _currentPlanet.Data.EnvironmentResource);
+                    }
                     break;
                 case Planet.ResourceType.Tech:
-                    _currentPlanet.Data.TechResource += change;
-                    _currentPlanet.Data.TechResource = Mathf.Max(0, _currentPlanet.Data.TechResource);
+                    if ((take && _currentPlanet.Data.TechResource >= amount) || (!take && TechAmount >= amount))
+                    {
+                        _currentPlanet.Data.TechResource += change;
+                        TechAmount -= change;
+                        _currentPlanet.Data.TechResource = Mathf.Max(0, _currentPlanet.Data.TechResource);
+                    }
                     break;
             }
             _resourceTimer = _currentResourceTimer;
@@ -205,11 +217,11 @@ public class GameController : Controller<GameController>
         {
             _resourceTimer -= Time.deltaTime;
 
-            if(_totalResourceCount > 20)
+            if (_totalResourceCount > 20)
             {
                 _currentResourceTimer = FASTEST_RESOURCE_TIMER;
             }
-            else if(_totalResourceCount > 3)
+            else if (_totalResourceCount > 3)
             {
                 _currentResourceTimer = FAST_RESOURCE_TIMER;
             }
@@ -307,9 +319,9 @@ public class GameController : Controller<GameController>
                     }
                     break;
                 case GameMode.Playing:
-                    if(_resourcesOnTheWay.Count > 0)
+                    if (_resourcesOnTheWay.Count > 0)
                     {
-                        foreach(var resource in _resourcesOnTheWay)
+                        foreach (var resource in _resourcesOnTheWay)
                         {
                             if (Vector3.Distance(resource.transform.position, resource.Destination) < 1.0f)
                             {
@@ -321,7 +333,7 @@ public class GameController : Controller<GameController>
                             }
                         }
 
-                        foreach(var resource in _resourcesToRemove)
+                        foreach (var resource in _resourcesToRemove)
                         {
                             _resourcesOnTheWay.Remove(resource);
                             resource.SelfDestruct();
@@ -345,7 +357,7 @@ public class GameController : Controller<GameController>
                             CameraController.Instance.SwitchToCamera(CameraController.FIRST_PERSON_CAMERA);
                         }
                     }
-                    else if(_playMode == PlayMode.TakingResources)
+                    else if (_playMode == PlayMode.TakingResources)
                     {
                         if (Input.GetMouseButtonUp(0))
                         {
@@ -355,7 +367,7 @@ public class GameController : Controller<GameController>
                         }
                         else
                         {
-                            if(_currentCloud.Empty)
+                            if (_currentCloud.Empty)
                             {
                                 _currentCloud.StopTaking();
                                 _currentCloud = null;
@@ -413,7 +425,7 @@ public class GameController : Controller<GameController>
                                     _menuBarAnimator.SetTrigger(_animPopMenuBar);
                                     _planetButton.SetActive(false);
                                 }
-                                else if(cloud != null)
+                                else if (cloud != null)
                                 {
                                     _currentCloud = cloud;
                                     _playMode = PlayMode.TakingResources;
@@ -440,7 +452,8 @@ public class GameController : Controller<GameController>
             }
         }
 
-        _resourceText.text = $"Tech ({TechAmount})\nEnvironment ({EnvironmentAmount})";
+        _techResourceText.text = $"{TechAmount}";
+        _environmentResourceText.text = $"{EnvironmentAmount}";
     }
 
     public void InstantiateRocketShip(Alien alienThatWantsToTravel)
