@@ -37,14 +37,14 @@ public class Universe : MonoBehaviour
             if(Random.Range(0.0f, 1.0f) > 0.5f)
             {
                 planet.Data.ResourceType = Planet.ResourceType.Environment;
-                planet.Data.TechResource = 500;
-                planet.Data.EnvironmentResource = 1000;
+                planet.Data.TechResource = 250;
+                planet.Data.EnvironmentResource = 500;
             }
             else
             {
                 planet.Data.ResourceType = Planet.ResourceType.Tech;
-                planet.Data.TechResource = 1000;
-                planet.Data.EnvironmentResource = 500;
+                planet.Data.TechResource = 500;
+                planet.Data.EnvironmentResource = 250;
             }
 
             float startingGrowth = Random.Range(0.0f, 1.0f);

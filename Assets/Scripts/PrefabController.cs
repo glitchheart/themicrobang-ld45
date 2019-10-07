@@ -34,6 +34,7 @@ public enum PrefabType
     Tree,
     UniverseCircle,
     Explosion,
+    Bush,
     WarningArrow
 }
 

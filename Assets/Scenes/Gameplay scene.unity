@@ -9240,26 +9240,7 @@ MonoBehaviour:
   - {fileID: -2444913551130115521, guid: 4d14785491125443aa2e0f0515c89914, type: 3}
   - {fileID: 5806016009924110923, guid: a5ce28291a7de422faeab7f9f489b745, type: 3}
   - {fileID: 8075497020567632671, guid: 5b634794402e24f62bc2c85f339bcd96, type: 3}
-  - {fileID: 5355733049049812905, guid: 0cc0ed10b83a8284b92244f90e104d5f, type: 3}
---- !u!95 &1770957113
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1770957110}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: f4b3f3ea4f595fc4ea4b131738bf610b, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  - {fileID: 8415295167514947854, guid: e1e25f7005c0348ccb1f9dbae1cf0500, type: 3}
 --- !u!1001 &1809147847
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -310,9 +310,9 @@ public class GameController : Controller<GameController>
     void CollectResource(Resource resource)
     {
         if (resource.ResourceType == Planet.ResourceType.Environment)
-            EnvironmentAmount++;
+            EnvironmentAmount += 5;
         else
-            TechAmount++;
+            TechAmount += 5;
 
         _resourcesToRemove.Add(resource);
     }
