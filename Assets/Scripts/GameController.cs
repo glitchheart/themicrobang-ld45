@@ -51,6 +51,7 @@ public class GameController : Controller<GameController>
 
     public enum GameMode
     {
+        Credits,
         Intro,
         Playing,
         Paused
@@ -63,6 +64,11 @@ public class GameController : Controller<GameController>
         PlanetCloseUp,
         TakingResources
     }
+
+    private List<Spaceship> _spaceShips;
+
+    [SerializeField]
+    private RocketCamera _rocketCam;
 
     [Header("Resources")]
     public int EnvironmentAmount;
@@ -88,7 +94,6 @@ public class GameController : Controller<GameController>
     private PlayMode _playMode;
     private Planet _currentPlanet;
     private ResourceCloud _currentCloud;
-
 
     [SerializeField]
     private TMPro.TextMeshProUGUI _planetText;
@@ -158,6 +163,7 @@ public class GameController : Controller<GameController>
 
     private void Start()
     {
+        _spaceShips = new List<Spaceship>();
         _resourcesOnTheWay = new List<Resource>();
         _resourcesToRemove = new List<Resource>();
         _depthOfField.active = false;
@@ -306,12 +312,23 @@ public class GameController : Controller<GameController>
         _resourcesToRemove.Add(resource);
     }
 
+    public void RemoveShip(Spaceship ship)
+    {
+        _spaceShips.Remove(ship);
+        if(_spaceShips.Count == 0)
+        {
+            _rocketCam.TurnOff();
+        }
+    }
+
     private void Update()
     {
         if (!RunCommands())
         {
             switch (_gameMode)
             {
+                case GameMode.Credits:
+                    break;
                 case GameMode.Intro:
                     if (Input.anyKeyDown)
                     {
@@ -459,11 +476,20 @@ public class GameController : Controller<GameController>
     public void InstantiateRocketShip(Alien alienThatWantsToTravel)
     {
         var ship = PrefabController.Instance.GetPrefabInstance<Spaceship>(PrefabType.Spaceship);
+        _spaceShips.Add(ship);
         ship.transform.position = alienThatWantsToTravel.transform.position;
         ship.transform.up = alienThatWantsToTravel.transform.up;
         alienThatWantsToTravel.transform.parent = alienThatWantsToTravel.transform;
         alienThatWantsToTravel.transform.localPosition = Vector3.zero;
-        ship.TakeOff(alienThatWantsToTravel.OriginPlanet, _universe.Planets[0], Spaceship.Intent.Kamikaze);
+        ship.transform.parent = alienThatWantsToTravel.transform;
+        ship.TakeOff(alienThatWantsToTravel.OriginPlanet, _universe.Planets[UnityEngine.Random.Range(0, _universe.Planets.Count)], Spaceship.Intent.Kamikaze);
+
+        _rocketCam.ShowShip(ship.transform);
+    }
+
+    public void IntroDone()
+    {
+        _gameMode = GameMode.Intro;
     }
 
     public void StartPlayMode()

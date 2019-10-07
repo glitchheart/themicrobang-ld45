@@ -44,7 +44,14 @@ public class Spaceship : PrefabObject
         DestinationPlanet = destinationPlanet;
         TravelIntent = intent;
         transform.position += transform.up * 1.0f;
+        _particleSystem.Stop();
+        StartCoroutine(DelayTakeOff());
+    }
 
+    IEnumerator DelayTakeOff()
+    {
+        yield return new WaitForSeconds(2.0f);
+        transform.parent = null;
         _state = State.Traveling;
         _particleSystem.Play();
         _timeBeforeNewDecision = 0.5f;
@@ -81,21 +88,22 @@ public class Spaceship : PrefabObject
 
                 if(Vector3.Distance(OriginPlanet.transform.position, DestinationPlanet.transform.position) < 3.0f)
                 {
-                    Destroy(gameObject);
+                    //Destroy(gameObject);
                 }
+
+                _destructDelay += Time.deltaTime;
                 break;
         }
-
-        _destructDelay += Time.deltaTime;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(_destructDelay > 2.0f)
+        if(_state == State.Traveling && _destructDelay > 2.0f)
         {
             var explosion = PrefabController.Instance.GetPrefabInstance<Explosion>(PrefabType.Explosion);
             explosion.transform.position = transform.position;
             explosion.Explode();
+            GameController.Instance.RemoveShip(this);
             Destroy(gameObject);
         }
     }
