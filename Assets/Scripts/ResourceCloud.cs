@@ -20,7 +20,7 @@ public class ResourceCloud : MonoBehaviour
 
         for (int i = 0; i < amount; i++)
         {
-            var obj = PrefabController.Instance.GetPrefabInstance(PrefabController.GEAR_PREFAB);
+            var obj = PrefabController.Instance.GetPrefabInstance(PrefabType.Gear);
             obj.transform.position = transform.position + Random.insideUnitSphere;
             obj.transform.parent = transform;
             obj.transform.eulerAngles = new Vector3(Random.Range(-90, 90), 0, 0);

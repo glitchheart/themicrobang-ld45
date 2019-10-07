@@ -45,9 +45,15 @@ public class Planet : MonoBehaviour
         public int EnvironmentResource;
     }
 
+    [SerializeField]
+    private float _radius = 1.0f;
+
     public string Name;
     // public int Population;
     public PlanetData Data;
+
+    public List<Alien> _aliens;
+    public List<Building> _buildings;
 
     private GameObject _child;
 
@@ -67,6 +73,12 @@ public class Planet : MonoBehaviour
     public const int RESOURCE_HIGH = 500;
     public const int RESOURCE_LOW = 100;
     public const int RESOURCE_VERY_LOW = 10;
+
+    private void Awake()
+    {
+        _aliens = new List<Alien>();
+        _buildings = new List<Building>();
+    }
 
     public GrowthState GetGrowthState()
     {
@@ -112,6 +124,26 @@ public class Planet : MonoBehaviour
         _time += Time.deltaTime;
     }
 
+    void SpawnBuilding()
+    {
+        var building = PrefabController.Instance.GetPrefabInstance(PrefabType.Building);
+        Vector3 dir = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized;
+        building.transform.position = transform.position + dir * _radius;
+        building.transform.up = dir;
+        building.transform.parent = transform;
+        _buildings.Add(building.GetComponent<Building>());
+    }
+
+    void SpawnAlien()
+    {
+        var alien = PrefabController.Instance.GetPrefabInstance(PrefabType.Alien);
+        Vector3 dir = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized;
+        alien.transform.position = transform.position + dir * _radius;
+        alien.transform.up = dir;
+        alien.transform.parent = transform;
+        _aliens.Add(alien.GetComponent<Alien>());
+    }
+
     void Evolve()
     {
         // TODO: Add more stuff. States?
@@ -119,6 +151,7 @@ public class Planet : MonoBehaviour
         {
             Data.Population += Data.Growth;
             Data.Population = Mathf.Max(0, Data.Population);
+            SpawnAlien();
             _time = 0.0f;
 
             float techChance = Data.TechResource > Data.EnvironmentResource ? 0.9f : 0.1f;
@@ -158,6 +191,7 @@ public class Planet : MonoBehaviour
             else if (Data.EnvironmentResource < RESOURCE_VERY_HIGH && Data.TechResource < RESOURCE_VERY_HIGH)
             {
                 Data.State = Planet.PlanetState.Balanced;
+                SpawnBuilding();
             }
 
             float growthRandom = Random.Range(0.0f, 1.0f);

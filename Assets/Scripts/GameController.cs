@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Rendering.PostProcessing;
 
 public class GameController : Controller<GameController>
 {
@@ -25,7 +26,7 @@ public class GameController : Controller<GameController>
         IEnumerator SpawnStar()
         {
             yield return new WaitForSeconds(Delay);
-            GameObject go = PrefabController.Instance.GetPrefabInstance(PrefabController.STAR_PREFAB);
+            GameObject go = PrefabController.Instance.GetPrefabInstance(PrefabType.Star);
             go.transform.localScale = new Vector3(20, 20, 20);
             go.transform.position = UnityEngine.Random.insideUnitSphere * Radius;
             go.GetComponent<Star>().Appear();
@@ -97,6 +98,13 @@ public class GameController : Controller<GameController>
     private GameCommand _currentCommand;
     private Queue<GameCommand> _gameCommands;
 
+    #region post-processing
+    [SerializeField]
+    private PostProcessVolume _postProcessVolume;
+
+    private DepthOfField _depthOfFIeld;
+    #endregion
+
     private Vector3 _lastMousePosition;
 
 
@@ -109,10 +117,12 @@ public class GameController : Controller<GameController>
         _animFade = Animator.StringToHash("fade");
         _gameCommands = new Queue<GameCommand>();
         _planetTextAnimator = _planetText.GetComponent<Animator>();
+        _depthOfFIeld = _postProcessVolume.profile.GetSetting<DepthOfField>();
     }
 
     private void Start()
     {
+        _depthOfFIeld.active = false;
         CameraController.Instance.SwitchToCamera(CameraController.INTRO_CAMERA);
     }
 
@@ -202,6 +212,7 @@ public class GameController : Controller<GameController>
 
                         if (Input.GetKeyDown(KeyCode.Escape))
                         {
+                            _depthOfFIeld.active = false;
                             _planetTextAnimator.SetTrigger(_animFade);
                             _playMode = PlayMode.MovingAround;
                             CameraController.Instance.SwitchToCamera(CameraController.INITIAL_PLAY_CAMERA);
@@ -237,7 +248,7 @@ public class GameController : Controller<GameController>
                                     planetCamera.transform.position = planet.transform.position + new Vector3(0, 0, -5);
                                     // planetCamera.transform.localRotation = Quaternion.identity;
                                     planetCamera.transform.LookAt(_currentPlanet.transform);
-                                    
+                                    _depthOfFIeld.active = true;
 
                                     SetPlanetText(planet);
                                     _growthArrow.rotation = Quaternion.Euler(0.0f, 0.0f, GetGrowthArrowRotation(_currentPlanet));
