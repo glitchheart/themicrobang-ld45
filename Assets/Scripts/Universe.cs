@@ -58,7 +58,7 @@ public class Universe : MonoBehaviour
             }
 
             Vector3 dir = new Vector3(Random.Range(-1.0f, 1.0f), 0, Random.Range(-1.0f, 1.0f)).normalized;
-            planet.transform.position = dir * (8 + _ringCount++ * 3.0f);
+            planet.transform.position = dir * (8 + _ringCount++ * 8.0f);
             planet.Orbit(Vector3.zero, Random.Range(10, 20));
 
             return planet;

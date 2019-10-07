@@ -286,14 +286,14 @@ public class GameController : Controller<GameController>
 
         QueueCommand(new SpawnStarCommand
         {
-            Amount = 20,
-            Radius = 50,
-            Delay = 0.1f,
+            Amount = 70,
+            Radius = 100,
+            Delay = 0.05f,
             Callback = () =>
 {
     _gameMode = GameMode.Playing;
 
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 10; i++)
     {
         PlacePlanet();
     }
