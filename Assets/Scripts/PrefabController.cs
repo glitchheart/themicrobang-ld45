@@ -33,7 +33,8 @@ public enum PrefabType
     Alien,
     Tree,
     UniverseCircle,
-    Explosion
+    Explosion,
+    Bush
 }
 
 public class PrefabController : Controller<PrefabController>

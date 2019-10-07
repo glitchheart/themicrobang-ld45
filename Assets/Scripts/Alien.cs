@@ -99,18 +99,22 @@ public class Alien : PrefabObject
 
                 if(_timer >= _currentTimeToWalk)
                 {
-                    int rand = Random.Range(0, 100);
+                    int rand = Random.Range(0, 1000);
 
-                    if (rand < 2)
+                    if (rand < 5)
                     {
-                        GameController.Instance.InstantiateRocketShip(this);
-                        _state = AlienState.InShip;
+                        if(OriginPlanet.Data.TechResource > 30)
+                        {
+                            OriginPlanet.Data.TechResource -= 10;
+                            GameController.Instance.InstantiateRocketShip(this);
+                            _state = AlienState.InShip;
+                        }
                     }
-                    else if (rand < 10)
+                    else if (rand < 100)
                     {
                         State = AlienState.Applauding;
                     }
-                    else if (rand < 20)
+                    else if (rand < 200)
                     {
                         State = AlienState.Idle;
                     }

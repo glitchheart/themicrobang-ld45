@@ -54,6 +54,7 @@ public class Planet : PrefabObject
 
     public List<Alien> _aliens;
     public List<Building> _buildings;
+    private List<Bush> _bushes;
 
     private GameObject _child;
 
@@ -78,6 +79,7 @@ public class Planet : PrefabObject
     {
         _aliens = new List<Alien>();
         _buildings = new List<Building>();
+        _bushes = new List<Bush>();
     }
 
     public GrowthState GetGrowthState()
@@ -119,7 +121,10 @@ public class Planet : PrefabObject
     {
         transform.RotateAround(_center, Vector3.up, _speed * Time.deltaTime);
 
-        Evolve();
+        if(Data.State != PlanetState.Extinction)
+        {
+            Evolve();
+        }
 
         _time += Time.deltaTime;
     }
@@ -134,6 +139,36 @@ public class Planet : PrefabObject
         _buildings.Add(building.GetComponent<Building>());
     }
 
+    void DespawnBuilding()
+    {
+        if (_buildings.Count == 0)
+            return;
+
+        var building = _buildings[Random.Range(0, _buildings.Count)];
+        // TODO: Dust or something? Confetti?
+        Destroy(building.gameObject);
+    }
+
+    void SpawnBush()
+    {
+        var building = PrefabController.Instance.GetPrefabInstance(PrefabType.Bush);
+        Vector3 dir = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized;
+        building.transform.position = transform.position + dir * _radius;
+        building.transform.up = dir;
+        building.transform.parent = transform;
+        _bushes.Add(building.GetComponent<Bush>());
+    }
+
+    void DespawnBush()
+    {
+        if (_bushes.Count == 0)
+            return;
+
+        var bush = _bushes[Random.Range(0, _bushes.Count)];
+        // TODO: Dust or something? Confetti?
+        Destroy(bush.gameObject);
+    }
+
     void SpawnAlien()
     {
         var alien = PrefabController.Instance.GetPrefabInstance<Alien>(PrefabType.Alien);
@@ -145,14 +180,37 @@ public class Planet : PrefabObject
         _aliens.Add(alien);
     }
 
+    void DespawnAlien()
+    {
+        if (_aliens.Count == 0)
+            return;
+
+        var alien = _aliens[Random.Range(0, _aliens.Count)];
+        // TODO: Dust or something? Confetti?
+        Destroy(alien.gameObject);
+    }
+
     void Evolve()
     {
         // TODO: Add more stuff. States?
         if (_time > _timeBeforePopulationGrow)
         {
+            int prev = Data.Population;
             Data.Population += Data.Growth;
+            int populationDiff = Data.Population - prev;
+
             Data.Population = Mathf.Max(0, Data.Population);
-            SpawnAlien();
+
+            if(populationDiff > 0 && Data.EnvironmentResource > 30)
+            {
+                SpawnAlien();
+                Data.EnvironmentResource -= 5;
+            }
+            else if(populationDiff > 0)
+            {
+                DespawnAlien();
+            }
+
             _time = 0.0f;
 
             float techChance = Data.TechResource > Data.EnvironmentResource ? 0.9f : 0.1f;
@@ -184,6 +242,10 @@ public class Planet : PrefabObject
             else if (Data.EnvironmentResource < RESOURCE_LOW && Data.TechResource < RESOURCE_LOW)
             {
                 Data.State = Planet.PlanetState.Desperation;
+                if (Random.Range(0.0f, 1.0f) < 0.02f)
+                {
+                    DespawnBuilding();
+                }
             }
             else if (Data.EnvironmentResource < RESOURCE_HIGH && Data.TechResource < RESOURCE_HIGH)
             {
@@ -192,7 +254,15 @@ public class Planet : PrefabObject
             else if (Data.EnvironmentResource < RESOURCE_VERY_HIGH && Data.TechResource < RESOURCE_VERY_HIGH)
             {
                 Data.State = Planet.PlanetState.Balanced;
-                SpawnBuilding();
+
+                if(Random.Range(0.0f, 1.0f) < 0.02f)
+                {
+                    SpawnBuilding();
+                }
+                else if(Random.Range(0.0f, 1.0f) < 0.02f)
+                {
+                    SpawnBush();
+                }
             }
 
             float growthRandom = Random.Range(0.0f, 1.0f);
@@ -223,6 +293,7 @@ public class Planet : PrefabObject
                     if (growthRandom > 0.7f)
                     {
                         Data.Growth -= 1;
+                        DespawnBush();
                     }
                     else if (growthRandom < 0.2f)
                     {

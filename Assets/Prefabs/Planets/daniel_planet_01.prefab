@@ -174,7 +174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 1
-  _radius: 1.55
+  _radius: 1.6
   Name: 
   _aliens: []
   _buildings: []
