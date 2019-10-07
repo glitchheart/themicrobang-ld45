@@ -9192,7 +9192,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1770957111}
   - component: {fileID: 1770957112}
-  - component: {fileID: 1770957113}
   m_Layer: 0
   m_Name: PrefabController
   m_TagString: Untagged
@@ -9241,6 +9240,7 @@ MonoBehaviour:
   - {fileID: 5806016009924110923, guid: a5ce28291a7de422faeab7f9f489b745, type: 3}
   - {fileID: 8075497020567632671, guid: 5b634794402e24f62bc2c85f339bcd96, type: 3}
   - {fileID: 8415295167514947854, guid: e1e25f7005c0348ccb1f9dbae1cf0500, type: 3}
+  - {fileID: 5355733049049812905, guid: 0cc0ed10b83a8284b92244f90e104d5f, type: 3}
 --- !u!1001 &1809147847
 PrefabInstance:
   m_ObjectHideFlags: 0
