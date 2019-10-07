@@ -77,26 +77,59 @@ public class Planet : PrefabObject
     public const int RESOURCE_LOW = 100;
     public const int RESOURCE_VERY_LOW = 10;
 
+    [SerializeField]
+    private Font font;
+
+    private GUIStyle _style;
     private void Awake()
     {
         _aliens = new List<Alien>();
         _buildings = new List<Building>();
         _bushes = new List<Bush>();
+
+        _style = new GUIStyle();
+        _style.normal.textColor = Color.white;
+        _style.fontSize = 25;
+        _style.font = font;
     }
 
+    void OnGUI()
+    {
+        var pos = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 3.0f - Vector3.right * 2.0f);
+        if (pos.z >= 0.0f)
+        {
+            GUI.Label(new Rect(pos.x, Screen.height - pos.y, 200, 200), Name, _style);
 
-    // [SerializeField]
-    // private Font font;
-
-    // private GUIStyle _style;
-
-    // void Awake()
-    // {
-    //     _style = new GUIStyle();
-    //     _style.normal.textColor = Color.white;
-    //     _style.fontSize = 20;
-    //     _style.font = font;
-    // }
+            _style.fontSize = 15;
+            string text = "";
+            switch (Data.State)
+            {
+                case PlanetState.Prosperous:
+                    _style.normal.textColor = new Color(33.0f / 255.0f, 219.0f / 255.0f, 0.0f / 255.0f);
+                    text = "Prosperous";
+                    break;
+                case PlanetState.Balanced:
+                    _style.normal.textColor = Color.green;
+                    text = "Balanced";
+                    break;
+                case PlanetState.Critical:
+                    _style.normal.textColor = Color.yellow;
+                    text = "Critical";
+                    break;
+                case PlanetState.Desperation:
+                    _style.normal.textColor = Color.red;
+                    text = "Desperation";
+                    break;
+                case PlanetState.Extinction:
+                    _style.normal.textColor = Color.gray;
+                    text = "Extinction";
+                    break;
+            }
+            GUI.Label(new Rect(pos.x + 10, Screen.height - pos.y + 30, 200, 200), text, _style);
+            _style.normal.textColor = Color.white;
+            _style.fontSize = 25;
+        }
+    }
 
     public GrowthState GetGrowthState()
     {
@@ -240,8 +273,8 @@ public class Planet : PrefabObject
             int highDec = 20;
             int lowDec = 10;
 
-            int highChange = Random.Range(0, 5) <= 1 ? -highDec : highDec;
-            int lowChange = Random.Range(0, 5) <= 1 ? -lowDec : lowDec;
+            int highChange = Random.Range(0, 5) <= 2 ? -highDec : highDec;
+            int lowChange = Random.Range(0, 5) <= 3 ? -lowDec : lowDec;
 
             if (Random.Range(0.0f, 1.0f) < techChance)
             {

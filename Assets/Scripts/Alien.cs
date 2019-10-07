@@ -127,9 +127,9 @@ public class Alien : PrefabObject
 
                 if(_timer >= _currentTimeToWalk)
                 {
-                    int rand = Random.Range(0, 1000);
+                    int rand = Random.Range(0, 10000);
 
-                    if (rand < 20)
+                    if (rand < 2)
                     {
                         Spaceship.Intent intent = GetIntent();
                         if(intent != Spaceship.Intent.None)
