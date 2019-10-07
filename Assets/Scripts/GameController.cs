@@ -60,15 +60,20 @@ public class GameController : Controller<GameController>
     {
         MovingAround,
         Placing,
-        PlanetCloseUp
+        PlanetCloseUp,
+        TakingResources
     }
+
+    [Header("Resources")]
+    public int EnvironmentAmount;
+    public int TechAmount;
 
     #region animator hashes
     private int _animFade;
     #endregion
 
     [SerializeField]
-    private LayerMask _planetLayer;
+    private LayerMask _castingLayers;
 
     [SerializeField]
     private Universe _universe;
@@ -81,12 +86,16 @@ public class GameController : Controller<GameController>
 
     private PlayMode _playMode;
     private Planet _currentPlanet;
+    private ResourceCloud _currentCloud;
 
     [SerializeField]
     private TMPro.TextMeshProUGUI _planetText;
 
     [SerializeField]
     private RectTransform _growthArrow;
+
+    [SerializeField]
+    private TMPro.TextMeshProUGUI _resourceText;
 
     [SerializeField]
     private GameObject _planetButton;
@@ -102,27 +111,34 @@ public class GameController : Controller<GameController>
     [SerializeField]
     private PostProcessVolume _postProcessVolume;
 
-    private DepthOfField _depthOfFIeld;
+    private DepthOfField _depthOfField;
     #endregion
 
     private Vector3 _lastMousePosition;
 
+    private Camera _mainCamera;
 
     [SerializeField]
     private float _rotateSpeed = 2.0f;
     private float _scrollSpeed = 2.0f;
 
+    private List<Resource> _resourcesOnTheWay;
+    private List<Resource> _resourcesToRemove;
+
     protected override void OnAwake()
     {
+        _mainCamera = Camera.main;
         _animFade = Animator.StringToHash("fade");
         _gameCommands = new Queue<GameCommand>();
         _planetTextAnimator = _planetText.GetComponent<Animator>();
-        _depthOfFIeld = _postProcessVolume.profile.GetSetting<DepthOfField>();
+        _depthOfField = _postProcessVolume.profile.GetSetting<DepthOfField>();
     }
 
     private void Start()
     {
-        _depthOfFIeld.active = false;
+        _resourcesOnTheWay = new List<Resource>();
+        _resourcesToRemove = new List<Resource>();
+        _depthOfField.active = false;
         CameraController.Instance.SwitchToCamera(CameraController.INTRO_CAMERA);
     }
 
@@ -192,6 +208,16 @@ public class GameController : Controller<GameController>
         _planetText.text += $"Environment: {planet.Data.EnvironmentResource}\n";
     }
 
+    void CollectResource(Resource resource)
+    {
+        if (resource.ResourceType == Planet.ResourceType.Environment)
+            EnvironmentAmount++;
+        else
+            TechAmount++;
+
+        _resourcesToRemove.Add(resource);
+    }
+
     private void Update()
     {
         if (!RunCommands())
@@ -205,6 +231,29 @@ public class GameController : Controller<GameController>
                     }
                     break;
                 case GameMode.Playing:
+                    if(_resourcesOnTheWay.Count > 0)
+                    {
+                        foreach(var resource in _resourcesOnTheWay)
+                        {
+                            if (Vector3.Distance(resource.transform.position, resource.Destination) < 1.0f)
+                            {
+                                CollectResource(resource);
+                            }
+                            else
+                            {
+                                resource.transform.Translate((resource.Destination - resource.transform.position) * 10 * Time.deltaTime);
+                            }
+                        }
+
+                        foreach(var resource in _resourcesToRemove)
+                        {
+                            _resourcesOnTheWay.Remove(resource);
+                            resource.SelfDestruct();
+                        }
+
+                        _resourcesToRemove.Clear();
+                    }
+
                     if (_playMode == PlayMode.PlanetCloseUp)
                     {
                         SetPlanetText(_currentPlanet);
@@ -212,10 +261,38 @@ public class GameController : Controller<GameController>
 
                         if (Input.GetKeyDown(KeyCode.Escape))
                         {
-                            _depthOfFIeld.active = false;
+                            _depthOfField.active = false;
                             _planetTextAnimator.SetTrigger(_animFade);
                             _playMode = PlayMode.MovingAround;
-                            CameraController.Instance.SwitchToCamera(CameraController.INITIAL_PLAY_CAMERA);
+                            CameraController.Instance.SwitchToCamera(CameraController.FIRST_PERSON_CAMERA);
+                        }
+                    }
+                    else if(_playMode == PlayMode.TakingResources)
+                    {
+                        if (Input.GetMouseButtonUp(0))
+                        {
+                            _currentCloud.StopTaking();
+                            _currentCloud = null;
+                            _playMode = PlayMode.MovingAround;
+                        }
+                        else
+                        {
+                            if(_currentCloud.Empty)
+                            {
+                                _currentCloud.StopTaking();
+                                _currentCloud = null;
+                                _playMode = PlayMode.MovingAround;
+                            }
+                            else
+                            {
+                                var resource = _currentCloud.Take();
+                                if (resource != null)
+                                {
+                                    resource.Destination = _mainCamera.transform.position - _mainCamera.transform.up * 0.1f + _mainCamera.transform.right * UnityEngine.Random.Range(-0.1f, 0.1f);
+                                    _resourcesOnTheWay.Add(resource);
+                                }
+                            }
+
                         }
                     }
                     else if (_playMode == PlayMode.MovingAround) // || _playMode == PlayMode.PlanetCloseUp)
@@ -235,9 +312,11 @@ public class GameController : Controller<GameController>
                         if (Input.GetMouseButtonDown(0))
                         {
                             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                            if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, _planetLayer))
+                            if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, _castingLayers))
                             {
                                 var planet = hit.collider.GetComponent<Planet>();
+                                var cloud = hit.collider.GetComponent<ResourceCloud>();
+
                                 if (planet != null)
                                 {
                                     _currentPlanet = planet;
@@ -248,12 +327,17 @@ public class GameController : Controller<GameController>
                                     planetCamera.transform.position = planet.transform.position + new Vector3(0, 0, -5);
                                     // planetCamera.transform.localRotation = Quaternion.identity;
                                     planetCamera.transform.LookAt(_currentPlanet.transform);
-                                    _depthOfFIeld.active = true;
+                                    _depthOfField.active = true;
 
                                     SetPlanetText(planet);
                                     _growthArrow.rotation = Quaternion.Euler(0.0f, 0.0f, GetGrowthArrowRotation(_currentPlanet));
                                     _planetTextAnimator.SetTrigger(_animFade);
                                     _planetButton.SetActive(false);
+                                }
+                                else if(cloud != null)
+                                {
+                                    _currentCloud = cloud;
+                                    _playMode = PlayMode.TakingResources;
                                 }
                             }
                         }
@@ -276,13 +360,14 @@ public class GameController : Controller<GameController>
                     break;
             }
         }
+
+        _resourceText.text = $"Tech ({TechAmount})\nEnvironment ({EnvironmentAmount})";
     }
 
     public void StartPlayMode()
     {
         HelpUIController.Instance.SetHelpTextEnabled(false);
-        CameraController.Instance.SwitchToCamera(CameraController.INITIAL_PLAY_CAMERA);
-        CameraController.Instance.CurrentCamera.CameraOrbit.Running = false;
+        CameraController.Instance.SwitchToCamera(CameraController.FIRST_PERSON_CAMERA);
 
         QueueCommand(new SpawnStarCommand
         {
@@ -290,14 +375,18 @@ public class GameController : Controller<GameController>
             Radius = 100,
             Delay = 0.05f,
             Callback = () =>
-{
-    _gameMode = GameMode.Playing;
+            {
+                _gameMode = GameMode.Playing;
 
-    for (int i = 0; i < 10; i++)
-    {
-        PlacePlanet();
-    }
-}
+                for (int i = 0; i < 10; i++)
+                {
+                    PlacePlanet();
+                }
+
+                CameraController.Instance.CurrentCamera.GetComponent<FirstPersonCamera>().Active = true;
+
+                // TODO: Show movement controls!
+            }
         });
     }
 

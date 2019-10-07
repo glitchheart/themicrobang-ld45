@@ -438,7 +438,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99e667c0ddf74452785a0dfdfc2638f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 7
+  Type: 6
   _state: 0
   _timeToApplaud: 3
   _minTimeToWalk: 1

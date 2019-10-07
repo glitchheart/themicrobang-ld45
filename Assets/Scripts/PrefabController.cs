@@ -36,7 +36,6 @@ public enum PrefabType
 
 public class PrefabController : Controller<PrefabController>
 {
-
     private Dictionary<PrefabType, List<GameObject>> _prefabMap;
 
     [SerializeField]
@@ -59,8 +58,8 @@ public class PrefabController : Controller<PrefabController>
 
     public Planet GetRandomPlanet()
     {
-        var planet = Instantiate(GetPrefabInstance(PrefabType.Planet));
-        return planet.GetComponent<Planet>();
+        var planet = Instantiate(GetPrefabInstance<Planet>(PrefabType.Planet));
+        return planet;
     }
 
     public GameObject GetPrefabInstance(PrefabType type)
@@ -70,5 +69,10 @@ public class PrefabController : Controller<PrefabController>
 
         var randomPrefab = list[Random.Range(0, list.Count)];
         return Instantiate(randomPrefab);
+    }
+
+    public T GetPrefabInstance<T>(PrefabType type) where T : PrefabObject
+    {
+        return GetPrefabInstance(type).GetComponent<T>();
     }
 }

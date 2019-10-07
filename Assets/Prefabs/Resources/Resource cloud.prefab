@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5105806054534249007}
   - component: {fileID: 5105806054534249000}
-  m_Layer: 0
+  - component: {fileID: 4894039532676687224}
+  m_Layer: 10
   m_Name: Resource cloud
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,9 +45,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d1f3934a9a75468c8fd63204bdcf148, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 4
+  Type: 3
+  _environmentColor: {r: 0.37375498, g: 1, b: 0, a: 0}
+  _techColor: {r: 0.914495, g: 0, b: 1, a: 0}
+  _meshRenderer: {fileID: 5105806056364934120}
   _resourceType: 0
+  _timePerResource: 0.082
   Amount: 10
+--- !u!135 &4894039532676687224
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5105806054534249001}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.65
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5105806056364934123
 GameObject:
   m_ObjectHideFlags: 0
@@ -59,7 +77,7 @@ GameObject:
   - component: {fileID: 5105806056364934127}
   - component: {fileID: 5105806056364934120}
   - component: {fileID: 5105806056364934121}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
