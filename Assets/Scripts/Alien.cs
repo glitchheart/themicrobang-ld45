@@ -81,6 +81,34 @@ public class Alien : PrefabObject
         _animYay = Animator.StringToHash("yay");
     }
 
+    private Spaceship.Intent GetIntent()
+    {
+        var environment = OriginPlanet.Data.EnvironmentResource;
+        var tech = OriginPlanet.Data.TechResource;
+
+        if(environment < Planet.RESOURCE_LOW)
+        {
+            return Spaceship.Intent.TakeEnvironment;
+        }
+
+        if(tech < Planet.RESOURCE_LOW)
+        {
+            return Spaceship.Intent.TakeTech;
+        }
+
+        if(environment > Planet.RESOURCE_HIGH)
+        {
+            return Spaceship.Intent.GiveEnvironment;
+        }
+
+        if(tech > Planet.RESOURCE_HIGH)
+        {
+            return Spaceship.Intent.GiveTech;
+        }
+
+        return Spaceship.Intent.None;
+    }
+
     private void Update()
     {
         switch(_state)
@@ -101,12 +129,13 @@ public class Alien : PrefabObject
                 {
                     int rand = Random.Range(0, 1000);
 
-                    if (rand < 2)
+                    if (rand < 20)
                     {
-                        if(OriginPlanet.Data.TechResource > 2000)
+                        Spaceship.Intent intent = GetIntent();
+                        if(intent != Spaceship.Intent.None)
                         {
                             OriginPlanet.Data.TechResource -= 10;
-                            GameController.Instance.InstantiateRocketShip(this);
+                            GameController.Instance.InstantiateRocketShip(this, intent);
                             _state = AlienState.InShip;
                         }
                     }

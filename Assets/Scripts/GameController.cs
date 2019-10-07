@@ -478,7 +478,7 @@ public class GameController : Controller<GameController>
         _environmentResourceText.text = $"{EnvironmentAmount}";
     }
 
-    public void InstantiateRocketShip(Alien alienThatWantsToTravel)
+    public void InstantiateRocketShip(Alien alienThatWantsToTravel, Spaceship.Intent intent)
     {
         var ship = PrefabController.Instance.GetPrefabInstance<Spaceship>(PrefabType.Spaceship);
         _spaceShips.Add(ship);
@@ -487,7 +487,7 @@ public class GameController : Controller<GameController>
         alienThatWantsToTravel.transform.parent = alienThatWantsToTravel.transform;
         alienThatWantsToTravel.transform.localPosition = Vector3.zero;
         ship.transform.parent = alienThatWantsToTravel.transform;
-        ship.TakeOff(alienThatWantsToTravel.OriginPlanet, _universe.Planets[UnityEngine.Random.Range(0, _universe.Planets.Count)], Spaceship.Intent.Kamikaze);
+        ship.TakeOff(alienThatWantsToTravel.OriginPlanet, _universe.Planets[UnityEngine.Random.Range(0, _universe.Planets.Count)], intent);
         ship.Alien = alienThatWantsToTravel;
         _rocketCam.ShowShip(ship.transform);
     }

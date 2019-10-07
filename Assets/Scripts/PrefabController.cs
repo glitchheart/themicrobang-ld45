@@ -35,7 +35,8 @@ public enum PrefabType
     UniverseCircle,
     Explosion,
     Bush,
-    WarningArrow
+    WarningArrow,
+    GasParticles
 }
 
 public class PrefabController : Controller<PrefabController>
@@ -62,7 +63,7 @@ public class PrefabController : Controller<PrefabController>
 
     public Planet GetRandomPlanet()
     {
-        var planet = Instantiate(GetPrefabInstance<Planet>(PrefabType.Planet));
+        var planet = GetPrefabInstance<Planet>(PrefabType.Planet);
         return planet;
     }
 

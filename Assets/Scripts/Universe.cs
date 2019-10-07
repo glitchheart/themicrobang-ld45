@@ -71,8 +71,8 @@ public class Universe : MonoBehaviour
             }
 
             Vector3 dir = new Vector3(Random.Range(-1.0f, 1.0f), 0, Random.Range(-1.0f, 1.0f)).normalized;
-            planet.transform.position = dir * (_ringCount * 10.0f);
-            planet.Orbit(Vector3.zero, Random.Range(10, 20));
+            planet.transform.position = dir * ((_ringCount + 1) * 10.0f);
+            planet.Orbit(Vector3.zero, Random.Range(10, 20) / (_ringCount + 1));
 
             var warningArrow = PrefabController.Instance.GetPrefabInstance(PrefabType.WarningArrow);
             warningArrow.transform.parent = planet.transform;
@@ -82,7 +82,7 @@ public class Universe : MonoBehaviour
 
             var circle = PrefabController.Instance.GetPrefabInstance(PrefabType.UniverseCircle);
             circle.transform.position = Vector3.zero;
-            float width = (_ringCount) * 20.0f;
+            float width = (_ringCount + 1) * 20.0f;
             circle.transform.localScale = new Vector3(width, width, width);
 
             _ringCount++;

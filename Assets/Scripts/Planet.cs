@@ -84,6 +84,20 @@ public class Planet : PrefabObject
         _bushes = new List<Bush>();
     }
 
+
+    // [SerializeField]
+    // private Font font;
+
+    // private GUIStyle _style;
+
+    // void Awake()
+    // {
+    //     _style = new GUIStyle();
+    //     _style.normal.textColor = Color.white;
+    //     _style.fontSize = 20;
+    //     _style.font = font;
+    // }
+
     public GrowthState GetGrowthState()
     {
         int growth = Data.Growth;
@@ -123,7 +137,7 @@ public class Planet : PrefabObject
     {
         transform.RotateAround(_center, Vector3.up, _speed * Time.deltaTime);
 
-        if(Data.State != PlanetState.Extinction)
+        if (Data.State != PlanetState.Extinction)
         {
             Evolve();
         }
@@ -189,7 +203,7 @@ public class Planet : PrefabObject
         if (_aliens.Count == 0)
             return;
 
-        if(alien == null)
+        if (alien == null)
             alien = _aliens[Random.Range(0, _aliens.Count)];
 
         _aliens.Remove(alien);
@@ -208,12 +222,12 @@ public class Planet : PrefabObject
 
             Data.Population = Mathf.Max(0, Data.Population);
 
-            if(populationDiff > 0 && Data.EnvironmentResource > 30)
+            if (populationDiff > 0 && Data.EnvironmentResource > 30)
             {
                 SpawnAlien();
                 Data.EnvironmentResource -= 5;
             }
-            else if(populationDiff > 0)
+            else if (populationDiff > 0)
             {
                 DespawnAlien();
             }
@@ -223,32 +237,64 @@ public class Planet : PrefabObject
             float techChance = Data.TechResource > Data.EnvironmentResource ? 0.9f : 0.1f;
             float environmentChance = 1.0f - techChance;
 
-            int highDec = 5;
-            int lowDec = 1;
+            int highDec = 20;
+            int lowDec = 10;
+
+            int highChange = Random.Range(0, 5) <= 1 ? -highDec : highDec;
+            int lowChange = Random.Range(0, 5) <= 1 ? -lowDec : lowDec;
 
             if (Random.Range(0.0f, 1.0f) < techChance)
             {
                 Data.EvolutionState = EvolutionState.Technology;
-                Data.EnvironmentResource -= lowDec;
-                Data.TechResource -= highDec;
+                Data.EnvironmentResource += lowChange;
+                Data.TechResource += highChange;
             }
             else
             {
                 Data.EvolutionState = EvolutionState.Environment;
-                Data.EnvironmentResource -= highDec;
-                Data.TechResource -= lowDec;
+                Data.EnvironmentResource += highChange;
+                Data.TechResource += lowChange;
             }
 
             Data.EnvironmentResource = Mathf.Max(0, Data.EnvironmentResource);
             Data.TechResource = Mathf.Max(0, Data.TechResource);
 
-            if (Data.EnvironmentResource < RESOURCE_VERY_LOW && Data.TechResource < RESOURCE_VERY_LOW)
-            {   
+            if (Data.EnvironmentResource == 0 && Data.TechResource == 0)
+            {
                 Data.State = Planet.PlanetState.Extinction;
+                foreach (var building in _buildings)
+                {
+                    Destroy(building.gameObject);
+                }
+
+                foreach (var bush in _bushes)
+                {
+                    Destroy(bush.gameObject);
+                }
+
+                foreach (var alien in _aliens)
+                {
+                    Destroy(alien.gameObject);
+                }
+
+                _buildings.Clear();
+                _bushes.Clear();
+                _aliens.Clear();
+
+                var gas = PrefabController.Instance.GetPrefabInstance(PrefabType.GasParticles);
+                gas.transform.parent = transform;
+                gas.transform.localPosition = Vector3.zero;
+                gas.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+            }
+            else if (Data.EnvironmentResource < RESOURCE_VERY_LOW && Data.TechResource < RESOURCE_VERY_LOW)
+            {
+                Data.State = Planet.PlanetState.Desperation;
+                WarningArrow.gameObject.SetActive(false);
             }
             else if (Data.EnvironmentResource < RESOURCE_LOW && Data.TechResource < RESOURCE_LOW)
             {
-                Data.State = Planet.PlanetState.Desperation;
+                Data.State = Planet.PlanetState.Critical;
+                WarningArrow.gameObject.SetActive(true);
                 if (Random.Range(0.0f, 1.0f) < 0.02f)
                 {
                     DespawnBuilding();
@@ -256,20 +302,18 @@ public class Planet : PrefabObject
             }
             else if (Data.EnvironmentResource < RESOURCE_HIGH && Data.TechResource < RESOURCE_HIGH)
             {
-                Data.State = Planet.PlanetState.Critical;
-                WarningArrow.gameObject.SetActive(true);
+                Data.State = Planet.PlanetState.Balanced;
+                WarningArrow.gameObject.SetActive(false);
             }
             else if (Data.EnvironmentResource < RESOURCE_VERY_HIGH && Data.TechResource < RESOURCE_VERY_HIGH)
             {
-                Data.State = Planet.PlanetState.Balanced;
-                WarningArrow.gameObject.SetActive(false);
-                SpawnBuilding();
+                Data.State = Planet.PlanetState.Prosperous;
 
-                if(Random.Range(0.0f, 1.0f) < 0.02f)
+                if (Random.Range(0.0f, 1.0f) < 0.02f)
                 {
                     SpawnBuilding();
                 }
-                else if(Random.Range(0.0f, 1.0f) < 0.02f)
+                else if (Random.Range(0.0f, 1.0f) < 0.02f)
                 {
                     SpawnBush();
                 }
