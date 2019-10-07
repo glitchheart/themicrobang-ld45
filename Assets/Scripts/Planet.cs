@@ -107,7 +107,7 @@ public class Planet : PrefabObject
         return GrowthState.VeryLow;
     }
 
-    public void Orbit(Vector3 center, float speed = 10.0f)
+    public void Orbit(Vector3 center, float speed = 5.0f)
     {
         //_child = new GameObject("Planet child");
         //_child
