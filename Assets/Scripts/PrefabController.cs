@@ -24,47 +24,55 @@ public abstract class Controller<T> : MonoBehaviour where T : MonoBehaviour
 }
 public enum PrefabType
 {
-    Star = 0,
-    Planet1 = 1,
-    Planet2 = 2,
-    Gear = 3,
-    GearCloud = 4,
-    Spaceship = 5,
-    Building = 6,
-    Alien = 7
+    Star,
+    Planet,
+    Gear,
+    ResourceCloud,
+    Spaceship,
+    Building,
+    Alien,
+    Tree
 }
+
 public class PrefabController : Controller<PrefabController>
 {
-    
+    private Dictionary<PrefabType, List<GameObject>> _prefabMap;
 
     [SerializeField]
-    private GameObject[] _prefabs;
-
-    private List<Planet> _planets;
+    private PrefabObject[] _prefabs;
 
     protected override void OnAwake()
     {
-        _planets = new List<Planet>();
+        _prefabMap = new Dictionary<PrefabType, List<GameObject>>();
 
         foreach(var prefab in _prefabs)
         {
-            var planet = prefab.GetComponent<Planet>();
-            if(planet != null)
+            if(!_prefabMap.ContainsKey(prefab.Type))
             {
-                _planets.Add(planet);
+                _prefabMap.Add(prefab.Type, new List<GameObject>());
             }
+
+            _prefabMap[prefab.Type].Add(prefab.gameObject);
         }
     }
 
     public Planet GetRandomPlanet()
     {
-        var planet = Instantiate(_planets[Random.Range(0, _planets.Count)]);
+        var planet = Instantiate(GetPrefabInstance<Planet>(PrefabType.Planet));
         return planet;
     }
 
     public GameObject GetPrefabInstance(PrefabType type)
     {
         // TODO: Change this to use pools at some point
-        return Instantiate(_prefabs[(int)type]);
+        var list = _prefabMap[type];
+
+        var randomPrefab = list[Random.Range(0, list.Count)];
+        return Instantiate(randomPrefab);
+    }
+
+    public T GetPrefabInstance<T>(PrefabType type) where T : PrefabObject
+    {
+        return GetPrefabInstance(type).GetComponent<T>();
     }
 }

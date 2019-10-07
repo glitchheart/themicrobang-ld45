@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Star : MonoBehaviour
+public class Star : PrefabObject
 {
     #region animator hashes
     private int _animScaleUp;
