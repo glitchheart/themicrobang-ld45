@@ -82,7 +82,7 @@ public class Universe : MonoBehaviour
 
             var circle = PrefabController.Instance.GetPrefabInstance(PrefabType.UniverseCircle);
             circle.transform.position = Vector3.zero;
-            float width = (_ringCount + 1) * 20.0f;
+            float width = (_ringCount + 1) * 20.5f;
             circle.transform.localScale = new Vector3(width, width, width);
 
             _ringCount++;

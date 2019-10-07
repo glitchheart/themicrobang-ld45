@@ -4993,6 +4993,8 @@ MonoBehaviour:
   _speed: 5
   _particleSystem: {fileID: 2407309623887461365}
   font: {fileID: 12800000, guid: 3edcb16f0a21dbf42ac50b3161779eb6, type: 3}
+  _gear: {fileID: 2800000, guid: 8f98d6644c73239419486f072deb1e0d, type: 3}
+  _environment: {fileID: 2800000, guid: a9872fe151e764c4aae82bff70bb73db, type: 3}
 --- !u!136 &8293881315566147100
 CapsuleCollider:
   m_ObjectHideFlags: 0

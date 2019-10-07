@@ -120,46 +120,73 @@ public class Spaceship : PrefabObject
 
     private GUIStyle _style;
 
+    [SerializeField]
+    private Texture _gear;
+
+
+    [SerializeField]
+    private Texture _environment;
+
     void Awake()
     {
         _style = new GUIStyle();
         _style.normal.textColor = Color.white;
-        _style.fontSize = 20;
+        _style.fontSize = 15;
         _style.font = font;
     }
 
     void OnGUI()
     {
-        var pos = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 2.0f);
+        var pos = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 2.0f - Vector3.right * 2.0f);
 
-        string text = "";
-
-        switch(_state)
+        if (pos.z >= 0.0f)
         {
-            case Spaceship.State.TravelingOutgoing:
-            text = $"Flying to {DestinationPlanet.Name}";
-            break;
-            case Spaceship.State.TravelingIngoing:
-            text = $"Flying home to {OriginPlanet.Name}";
-            break;
-        }
+            string travelText = "";
+            string intentText = "";
 
-        switch(TravelIntent)
-        {
-            case Spaceship.Intent.GiveEnvironment:
-            case Spaceship.Intent.TakeEnvironment:
-            text += $"\nCarrying {_takenAmount} environment";
-            break;
-            case Spaceship.Intent.GiveTech:
-            case Spaceship.Intent.TakeTech:
-            text += $"\nCarrying {_takenAmount} tech";
-            break;
-            case Spaceship.Intent.Kamikaze:
-            text += "\nWith no peaceful intentions";
-            break;
-        }
+            switch (_state)
+            {
+                case Spaceship.State.TravelingOutgoing:
+                    travelText = $"Flying to {DestinationPlanet.Name}";
+                    break;
+                case Spaceship.State.TravelingIngoing:
+                    travelText = $"Flying home to {OriginPlanet.Name}";
+                    break;
+            }
 
-        GUI.Label(new Rect(pos.x, Screen.height - pos.y, 200, 200), text, _style);
+            Texture texToDraw = null;
+
+            switch (TravelIntent)
+            {
+                case Spaceship.Intent.GiveEnvironment:
+                    intentText += $"Carrying {_takenAmount}";
+                    texToDraw = _environment;
+                    break;
+                case Spaceship.Intent.TakeEnvironment:
+                    texToDraw = _environment;
+                    intentText += $"Carrying {_takenAmount}";
+                    break;
+                case Spaceship.Intent.GiveTech:
+                    intentText += $"Carrying {_takenAmount}";
+                    texToDraw = _gear;
+                    break;
+                case Spaceship.Intent.TakeTech:
+                    intentText += $"Carrying {_takenAmount}";
+                    texToDraw = _gear;
+                    break;
+                case Spaceship.Intent.Kamikaze:
+                    intentText += "With no peaceful intentions";
+                    break;
+            }
+
+            GUI.Label(new Rect(pos.x, Screen.height - pos.y, 200, 200), travelText, _style);
+            GUI.Label(new Rect(pos.x, Screen.height - pos.y + 30, 200, 200), intentText, _style);
+
+            if (texToDraw != null)
+            {
+                GUI.Label(new Rect(pos.x + 80, Screen.height - pos.y + 25, 30, 30), texToDraw, _style);
+            }
+        }
     }
 
     private void Explode()
