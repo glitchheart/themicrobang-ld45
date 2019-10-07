@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Building : PrefabObject
+public class Tree : PrefabObject
 {
     // Start is called before the first frame update
     void Start()

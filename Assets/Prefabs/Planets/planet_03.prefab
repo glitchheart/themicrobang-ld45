@@ -92,6 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1afac33a75ac4ecda70a94eae51f996, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Type: 1
   _radius: 1
   Name: 
   _aliens: []

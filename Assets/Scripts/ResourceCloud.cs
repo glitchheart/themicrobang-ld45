@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Planet;
 
-public class ResourceCloud : MonoBehaviour
+public class ResourceCloud : PrefabObject
 {
+    public ResourceType _resourceType;
+
     [SerializeField]
     public int Amount = 10;
 
@@ -11,6 +14,7 @@ public class ResourceCloud : MonoBehaviour
 
     private void Start()
     {
+        _resourceType = Random.Range(0, 50) > 50 ? ResourceType.Environment : ResourceType.Tech;
         SpawnCloud(Amount);
     }
 
@@ -20,7 +24,7 @@ public class ResourceCloud : MonoBehaviour
 
         for (int i = 0; i < amount; i++)
         {
-            var obj = PrefabController.Instance.GetPrefabInstance(PrefabType.Gear);
+            var obj = PrefabController.Instance.GetPrefabInstance(_resourceType == ResourceType.Tech ? PrefabType.Gear : PrefabType.Tree);
             obj.transform.position = transform.position + Random.insideUnitSphere;
             obj.transform.parent = transform;
             obj.transform.eulerAngles = new Vector3(Random.Range(-90, 90), 0, 0);

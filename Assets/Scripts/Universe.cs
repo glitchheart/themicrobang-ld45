@@ -13,6 +13,11 @@ public class Universe : MonoBehaviour
     [SerializeField]
     private int _maxRings = 10;
 
+    public void SpawnResources()
+    {
+    
+    }
+
     public Planet PlaceNextPlanet()
     {
         if(_ringCount < _maxRings)

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5105806054534249007}
   - component: {fileID: 5105806054534249000}
   m_Layer: 0
-  m_Name: Gear cloud
+  m_Name: Resource cloud
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d1f3934a9a75468c8fd63204bdcf148, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Type: 4
+  _resourceType: 0
   Amount: 10
 --- !u!1 &5105806056364934123
 GameObject:
