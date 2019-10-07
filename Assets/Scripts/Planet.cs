@@ -52,6 +52,9 @@ public class Planet : MonoBehaviour
     // public int Population;
     public PlanetData Data;
 
+    public List<Alien> _aliens;
+    public List<Building> _buildings;
+
     private GameObject _child;
 
     private Vector3 _center;
@@ -70,6 +73,12 @@ public class Planet : MonoBehaviour
     public const int RESOURCE_HIGH = 500;
     public const int RESOURCE_LOW = 100;
     public const int RESOURCE_VERY_LOW = 10;
+
+    private void Awake()
+    {
+        _aliens = new List<Alien>();
+        _buildings = new List<Building>();
+    }
 
     public GrowthState GetGrowthState()
     {
@@ -122,6 +131,17 @@ public class Planet : MonoBehaviour
         building.transform.position = transform.position + dir * _radius;
         building.transform.up = dir;
         building.transform.parent = transform;
+        _buildings.Add(building.GetComponent<Building>());
+    }
+
+    void SpawnAlien()
+    {
+        var alien = PrefabController.Instance.GetPrefabInstance(PrefabType.Alien);
+        Vector3 dir = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized;
+        alien.transform.position = transform.position + dir * _radius;
+        alien.transform.up = dir;
+        alien.transform.parent = transform;
+        _aliens.Add(alien.GetComponent<Alien>());
     }
 
     void Evolve()
@@ -131,6 +151,7 @@ public class Planet : MonoBehaviour
         {
             Data.Population += Data.Growth;
             Data.Population = Mathf.Max(0, Data.Population);
+            SpawnAlien();
             _time = 0.0f;
 
             float techChance = Data.TechResource > Data.EnvironmentResource ? 0.9f : 0.1f;

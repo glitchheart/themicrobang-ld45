@@ -173,8 +173,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1afac33a75ac4ecda70a94eae51f996, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _radius: 1.81
+  _radius: 1.51
   Name: 
+  _aliens: []
+  _buildings: []
 --- !u!135 &-564630162418591990
 SphereCollider:
   m_ObjectHideFlags: 0

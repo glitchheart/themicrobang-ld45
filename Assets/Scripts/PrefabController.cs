@@ -30,7 +30,8 @@ public enum PrefabType
     Gear = 3,
     GearCloud = 4,
     Spaceship = 5,
-    Building = 6
+    Building = 6,
+    Alien = 7
 }
 public class PrefabController : Controller<PrefabController>
 {
